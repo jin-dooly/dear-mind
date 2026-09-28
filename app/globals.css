@@ -1,15 +1,39 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --font-jua: var(--font-jua), sans-serif;
+
+  --color-sky-light: #dce9fb;
+  --color-sky-dark: #ece3fb;
+  --color-ink: #4a5480;
+  --color-ink-dark: #2e2a45;
+  --color-muted: #8b8fbe;
+
+  --color-folder-purple-back: #8b6fbe;
+  --color-folder-purple-front: #c9b8ea;
+  --color-folder-purple-text: #4a3b7a;
+  --color-folder-purple-sub: #7a63a8;
+
+  --color-folder-pink-back: #d98fb0;
+  --color-folder-pink-front: #f7c6da;
+  --color-folder-pink-text: #8a3f5e;
+  --color-folder-pink-sub: #b4658a;
+
+  --color-folder-mint-back: #5fae85;
+  --color-folder-mint-front: #b9e8d0;
+  --color-folder-mint-text: #2e6b4a;
+  --color-folder-mint-sub: #3e8564;
+
+  /* 레벨(1~4) 그라데이션 — 가볍게(하늘색) -> 깊게(진보라) */
+  --color-level-1: #dceffb;
+  --color-level-2: #e3e3fb;
+  --color-level-3: #f0d9f5;
+  --color-level-4: #c9b8ea;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,10 +41,4 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
