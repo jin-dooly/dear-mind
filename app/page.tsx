@@ -1,17 +1,19 @@
-import Link from 'next/link';
-import { LogIn } from 'lucide-react';
-import { WindowFrame } from '@/app/components/WindowFrame';
-import { SkyDecor } from '@/app/components/SkyDecor';
+import Link from "next/link";
+import { LogIn } from "lucide-react";
+import { WindowFrame } from "@/app/components/WindowFrame";
+import { SkyDecor } from "@/app/components/SkyDecor";
 
 export default function MainPage() {
   return (
-    <div className="relative p-7 flex flex-col min-h-screen">
+    <div className="relative p-7 flex flex-col min-h-screen items-center justify-center">
       <SkyDecor />
-      <WindowFrame title="DEAR-MIND.EXE">
-        <div className="relative flex flex-col grow items-center justify-center gap-2 text-center">
-          <p className="text-[13px] text-muted">매일 하나의 질문으로</p>
+      <WindowFrame title="DEAR-MIND.EXE" className="w-full max-w-140 max-h-140">
+        <div className="relative flex flex-col grow items-center justify-center gap-2 text-center px-20">
           <h1 className="font-jua text-2xl text-ink mb-1">끄적끄적</h1>
-          <p className="text-[13px] text-muted mb-8">AI와 함께하는 자기성찰 기록</p>
+          <p className="text-[13px] text-muted">매일 하나의 질문으로</p>
+          <p className="text-[13px] text-muted mb-8">
+            AI와 함께하는 자기성찰 기록
+          </p>
 
           <Link
             href="/onboarding/age"
