@@ -5,9 +5,8 @@ import { useRouter } from 'next/navigation';
 import { WindowFrame } from '@/app/components/WindowFrame';
 import { ChoiceButton } from '@/app/components/ChoiceButton';
 import { PrimaryButton } from '@/app/components/PrimaryButton';
-import { useHasMounted } from '@/app/lib/useHasMounted';
-import { DEFAULT_PROFILE, getProfile, saveProfile } from '@/app/lib/storage';
-import type { AgeGroup, Level } from '@/app/lib/types';
+import { saveProfile, signOut } from '@/app/lib/actions';
+import type { AgeGroup, Level, UserProfile } from '@/app/lib/types';
 
 const AGE_GROUPS: AgeGroup[] = ['10대', '20대', '30대', '40대', '50대 이상'];
 const LEVELS: { level: Level; label: string; color: string }[] = [
@@ -17,19 +16,20 @@ const LEVELS: { level: Level; label: string; color: string }[] = [
   { level: 4, label: 'Lv.4 아주 깊게', color: '#C9B8EA' },
 ];
 
-export default function SettingsPage() {
+export function SettingsForm({ profile }: { profile: UserProfile }) {
   const router = useRouter();
-  const hasMounted = useHasMounted();
-  const profile = hasMounted ? getProfile() : DEFAULT_PROFILE;
-  const [ageOverride, setAgeOverride] = useState<AgeGroup | null>(null);
-  const [levelOverride, setLevelOverride] = useState<Level | null>(null);
+  const [ageGroup, setAgeGroup] = useState<AgeGroup>(profile.ageGroup);
+  const [level, setLevel] = useState<Level>(profile.baseLevel);
+  const [saving, setSaving] = useState(false);
 
-  const ageGroup = ageOverride ?? profile.ageGroup;
-  const level = levelOverride ?? profile.baseLevel;
-
-  function handleSave() {
-    saveProfile({ ageGroup, baseLevel: level });
-    router.push('/home');
+  async function handleSave() {
+    setSaving(true);
+    try {
+      await saveProfile({ ageGroup, baseLevel: level });
+      router.push('/home');
+    } catch {
+      setSaving(false);
+    }
   }
 
   return (
@@ -45,7 +45,7 @@ export default function SettingsPage() {
               {AGE_GROUPS.map((age) => (
                 <button
                   key={age}
-                  onClick={() => setAgeOverride(age)}
+                  onClick={() => setAgeGroup(age)}
                   className={`rounded-full border-2 px-3 py-1.5 text-[12px] font-jua transition-colors ${
                     ageGroup === age ? 'border-ink-dark bg-sky-light text-ink' : 'border-[#C7CDEB] bg-white text-muted'
                   }`}
@@ -64,7 +64,7 @@ export default function SettingsPage() {
                   key={l}
                   label={label}
                   selected={level === l}
-                  onClick={() => setLevelOverride(l)}
+                  onClick={() => setLevel(l)}
                   accentColor={color}
                 />
               ))}
@@ -72,9 +72,15 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <PrimaryButton onClick={handleSave} className="mt-4">
-          저장하기
+        <PrimaryButton onClick={handleSave} disabled={saving} className="mt-4">
+          {saving ? '저장 중...' : '저장하기'}
         </PrimaryButton>
+        <button
+          onClick={() => signOut()}
+          className="mt-3 text-[12px] text-muted underline self-center"
+        >
+          로그아웃
+        </button>
       </WindowFrame>
     </div>
   );

@@ -4,9 +4,9 @@ import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { WindowFrame } from '@/app/components/WindowFrame';
 import { PrimaryButton } from '@/app/components/PrimaryButton';
-import { analyzeJournal } from '@/app/lib/analysis';
+import { createJournal } from '@/app/lib/actions';
 import { useHasMounted } from '@/app/lib/useHasMounted';
-import { getSelectedQuestion, setPendingJournal } from '@/app/lib/storage';
+import { getSelectedQuestion } from '@/app/lib/storage';
 
 export default function EditorPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -21,20 +21,21 @@ export default function EditorPage({ params }: { params: Promise<{ id: string }>
     if (!question || question.id !== id) router.replace('/write');
   }, [hasMounted, question, id, router]);
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!question || question.id !== id || content.trim().length === 0) return;
     setSubmitting(true);
-    const analysis = analyzeJournal(content);
-    setPendingJournal({
-      id: `${Date.now()}`,
-      questionId: question.id,
-      questionContent: question.content,
-      level: question.level,
-      content,
-      createdAt: new Date().toISOString(),
-      analysis,
-    });
-    router.push(`/write/${id}/analysis`);
+    try {
+      const journalId = await createJournal({
+        questionId: question.id,
+        questionContent: question.content,
+        level: question.level,
+        content,
+      });
+      // 뒤로 가기로 에디터에 돌아와 같은 글을 다시 저장하지 않도록 replace
+      router.replace(`/write/analysis/${journalId}`);
+    } catch {
+      setSubmitting(false);
+    }
   }
 
   if (!question || question.id !== id) return null;
@@ -53,7 +54,7 @@ export default function EditorPage({ params }: { params: Promise<{ id: string }>
         <p className="text-[11px] text-muted text-right mt-1.5 mb-4">{content.length}자</p>
 
         <PrimaryButton onClick={handleSubmit} disabled={content.trim().length === 0 || submitting}>
-          {submitting ? '분석 중...' : 'AI에게 분석 받기'}
+          {submitting ? '저장 중...' : '저장하기'}
         </PrimaryButton>
       </WindowFrame>
     </div>

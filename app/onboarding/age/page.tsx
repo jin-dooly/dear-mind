@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { WindowFrame } from "@/app/components/WindowFrame";
 import { ChoiceButton } from "@/app/components/ChoiceButton";
 import { PrimaryButton } from "@/app/components/PrimaryButton";
-import { saveProfile } from "@/app/lib/storage";
+import { saveProfile } from "@/app/lib/actions";
 import type { AgeGroup } from "@/app/lib/types";
 
 const AGE_GROUPS: AgeGroup[] = ["10대", "20대", "30대", "40대", "50대 이상"];
@@ -14,9 +14,9 @@ export default function OnboardingAgePage() {
   const router = useRouter();
   const [selected, setSelected] = useState<AgeGroup | null>(null);
 
-  function handleNext() {
+  async function handleNext() {
     if (!selected) return;
-    saveProfile({ ageGroup: selected });
+    await saveProfile({ ageGroup: selected });
     router.push("/onboarding/level");
   }
 

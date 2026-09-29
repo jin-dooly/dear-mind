@@ -29,5 +29,6 @@ export interface Journal {
   level: Level;
   content: string;
   createdAt: string;
-  analysis: AIAnalysis;
+  // 분석 전이거나 분석에 실패하면 null
+  analysis: AIAnalysis | null;
 }

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { WindowFrame } from "@/app/components/WindowFrame";
 import { ChoiceButton } from "@/app/components/ChoiceButton";
 import { PrimaryButton } from "@/app/components/PrimaryButton";
-import { saveProfile } from "@/app/lib/storage";
+import { saveProfile } from "@/app/lib/actions";
 import type { Level } from "@/app/lib/types";
 
 const LEVELS: {
@@ -44,9 +44,9 @@ export default function OnboardingLevelPage() {
   const router = useRouter();
   const [selected, setSelected] = useState<Level | null>(null);
 
-  function handleDone() {
+  async function handleDone() {
     if (!selected) return;
-    saveProfile({ baseLevel: selected });
+    await saveProfile({ baseLevel: selected });
     router.push("/home");
   }
 

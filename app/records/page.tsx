@@ -1,9 +1,7 @@
-'use client';
-
 import Link from 'next/link';
 import { WindowFrame } from '@/app/components/WindowFrame';
-import { useHasMounted } from '@/app/lib/useHasMounted';
-import { getJournals } from '@/app/lib/storage';
+import { getJournals } from '@/app/lib/db';
+import { formatDate } from '@/app/lib/format';
 
 const LEVEL_COLOR: Record<number, string> = {
   1: '#DCEFFB',
@@ -12,14 +10,8 @@ const LEVEL_COLOR: Record<number, string> = {
   4: '#C9B8EA',
 };
 
-function formatDate(iso: string) {
-  const d = new Date(iso);
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
-}
-
-export default function RecordsPage() {
-  const hasMounted = useHasMounted();
-  const journals = hasMounted ? getJournals() : [];
+export default async function RecordsPage() {
+  const journals = await getJournals();
 
   return (
     <div className="p-7 flex flex-col min-h-screen">

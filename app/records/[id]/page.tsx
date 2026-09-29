@@ -1,21 +1,12 @@
-'use client';
-
-import { use } from 'react';
 import Link from 'next/link';
 import { WindowFrame } from '@/app/components/WindowFrame';
-import { CompanionBlob } from '@/app/components/CompanionBlob';
-import { useHasMounted } from '@/app/lib/useHasMounted';
-import { getJournal } from '@/app/lib/storage';
+import { AnalysisResult } from '@/app/components/AnalysisResult';
+import { getJournal } from '@/app/lib/db';
+import { formatDate } from '@/app/lib/format';
 
-function formatDate(iso: string) {
-  const d = new Date(iso);
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
-}
-
-export default function RecordDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const hasMounted = useHasMounted();
-  const journal = hasMounted ? getJournal(id) : undefined;
+export default async function RecordDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const journal = await getJournal(id);
 
   if (!journal) {
     return (
@@ -30,8 +21,6 @@ export default function RecordDetailPage({ params }: { params: Promise<{ id: str
     );
   }
 
-  const { analysis } = journal;
-
   return (
     <div className="p-7 flex flex-col min-h-screen">
       <WindowFrame title={`RECORD · ${formatDate(journal.createdAt)}`}>
@@ -42,30 +31,7 @@ export default function RecordDetailPage({ params }: { params: Promise<{ id: str
           {journal.content}
         </p>
 
-        <CompanionBlob />
-
-        {analysis.isSafetyFallback ? (
-          <p className="text-[13px] text-ink leading-relaxed mt-5 whitespace-pre-line text-center">
-            {analysis.message}
-          </p>
-        ) : (
-          <>
-            <p className="text-[13px] text-ink leading-relaxed mt-5">{analysis.summary}</p>
-            <div className="flex flex-wrap gap-1.5 mt-4">
-              {analysis.toneKeywords.map((kw) => (
-                <span
-                  key={kw}
-                  className="rounded-full border border-folder-purple-back bg-folder-purple-front/40 px-2.5 py-1 text-[11px] font-jua text-folder-purple-text"
-                >
-                  #{kw}
-                </span>
-              ))}
-            </div>
-            <p className="text-[12px] text-muted leading-relaxed mt-4 rounded-xl bg-sky-light/60 p-3.5">
-              {analysis.message}
-            </p>
-          </>
-        )}
+        <AnalysisResult journalId={journal.id} initialAnalysis={journal.analysis} />
       </WindowFrame>
     </div>
   );
