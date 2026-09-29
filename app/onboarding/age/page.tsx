@@ -1,15 +1,14 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { WindowFrame } from '@/app/components/WindowFrame';
-import { SkyDecor } from '@/app/components/SkyDecor';
-import { ChoiceButton } from '@/app/components/ChoiceButton';
-import { PrimaryButton } from '@/app/components/PrimaryButton';
-import { saveProfile } from '@/app/lib/storage';
-import type { AgeGroup } from '@/app/lib/types';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { WindowFrame } from "@/app/components/WindowFrame";
+import { ChoiceButton } from "@/app/components/ChoiceButton";
+import { PrimaryButton } from "@/app/components/PrimaryButton";
+import { saveProfile } from "@/app/lib/storage";
+import type { AgeGroup } from "@/app/lib/types";
 
-const AGE_GROUPS: AgeGroup[] = ['10대', '20대', '30대', '40대', '50대 이상'];
+const AGE_GROUPS: AgeGroup[] = ["10대", "20대", "30대", "40대", "50대 이상"];
 
 export default function OnboardingAgePage() {
   const router = useRouter();
@@ -18,13 +17,12 @@ export default function OnboardingAgePage() {
   function handleNext() {
     if (!selected) return;
     saveProfile({ ageGroup: selected });
-    router.push('/onboarding/level');
+    router.push("/onboarding/level");
   }
 
   return (
-    <div className="relative p-7 flex flex-col min-h-screen">
-      <SkyDecor />
-      <WindowFrame title="ONBOARDING (1/2)">
+    <div className="relative p-7 flex flex-col min-h-screen items-center">
+      <WindowFrame title="ONBOARDING (1/2)" className="w-full max-w-200">
         <p className="text-[13px] text-muted mb-1">먼저, 나이대를 알려주세요</p>
         <h1 className="font-jua text-lg text-ink mb-6">몇 살이신가요?</h1>
 
