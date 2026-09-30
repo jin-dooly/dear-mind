@@ -1,6 +1,11 @@
-export function CompanionBlob() {
+/** animated면 글을 읽는 동안 숨쉬듯 천천히 움직임 */
+export function CompanionBlob({ animated = false }: { animated?: boolean }) {
   return (
-    <div className="relative flex items-center justify-center h-28 w-28 mx-auto">
+    <div
+      className={`relative flex items-center justify-center h-28 w-28 mx-auto ${
+        animated ? 'animate-breathe motion-reduce:animate-none' : ''
+      }`}
+    >
       <div className="absolute inset-0 rounded-full bg-folder-purple-front blur-xl opacity-60" />
       <svg viewBox="0 0 120 120" className="relative h-24 w-24">
         <path

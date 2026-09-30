@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
 import { ErrorMessage } from '@/app/components/ErrorMessage';
+import { RetroProgressBar } from '@/app/components/RetroProgressBar';
 import { refreshQuestions } from '@/app/lib/actions';
 import type { Question } from '@/app/lib/types';
 
@@ -56,24 +57,36 @@ export function QuestionList({
 
   return (
     <div className="flex flex-col gap-3">
-      {sets[index].map((q) => (
-        <Link
-          key={q.id}
-          href={`/write/${q.id}`}
-          aria-disabled={pending}
-          className={`w-full rounded-xl border-2 border-ink-dark bg-white px-4 py-3.5 text-left transition-transform active:translate-y-0.5 ${
-            pending ? 'pointer-events-none opacity-60' : ''
-          }`}
-        >
-          <span
-            className="inline-block rounded-full px-2 py-0.5 text-[10px] font-jua text-ink-dark mb-2"
-            style={{ backgroundColor: LEVEL_COLOR[q.level] }}
+      {/* 새 질문을 받는 동안 카드는 흐리게 두고 그 위에 진행 바를 띄움 */}
+      <div className="relative flex flex-col gap-3">
+        {sets[index].map((q) => (
+          <Link
+            key={q.id}
+            href={`/write/${q.id}`}
+            aria-disabled={pending}
+            tabIndex={pending ? -1 : undefined}
+            className={`w-full rounded-xl border-2 border-ink-dark bg-white px-4 py-3.5 text-left transition-[transform,opacity] active:translate-y-0.5 ${
+              pending ? 'pointer-events-none opacity-30' : ''
+            }`}
           >
-            Lv.{q.level}
-          </span>
-          <span className="block text-[13px] text-ink leading-relaxed">{q.content}</span>
-        </Link>
-      ))}
+            <span
+              className="inline-block rounded-full px-2 py-0.5 text-[10px] font-jua text-ink-dark mb-2"
+              style={{ backgroundColor: LEVEL_COLOR[q.level] }}
+            >
+              Lv.{q.level}
+            </span>
+            <span className="block text-[13px] text-ink leading-relaxed">{q.content}</span>
+          </Link>
+        ))}
+        {pending && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+            <p role="status" className="font-jua text-[13px] text-ink">
+              새 질문을 고르고 있어요
+            </p>
+            <RetroProgressBar size="sm" />
+          </div>
+        )}
+      </div>
 
       {sets.length > 1 && (
         <nav aria-label="오늘 받은 질문 세트" className="flex items-center justify-center gap-3 mt-1">

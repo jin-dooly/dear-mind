@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { AnalysisWaiting } from '@/app/components/AnalysisWaiting';
 import { CompanionBlob } from '@/app/components/CompanionBlob';
 import { analyzeAndSaveJournal } from '@/app/lib/actions';
 import type { AIAnalysis } from '@/app/lib/types';
@@ -39,7 +40,7 @@ export function AnalysisResult({
 
   return (
     <>
-      <CompanionBlob />
+      <CompanionBlob animated={!analysis && !failed} />
 
       {!analysis ? (
         failed ? (
@@ -52,9 +53,7 @@ export function AnalysisResult({
             </button>
           </div>
         ) : (
-          <p className="text-[13px] text-muted leading-relaxed mt-5 text-center">
-            AI가 글을 읽고 있어요...
-          </p>
+          <AnalysisWaiting />
         )
       ) : analysis.isSafetyFallback ? (
         <p className="text-[13px] text-ink leading-relaxed mt-5 whitespace-pre-line text-center">
