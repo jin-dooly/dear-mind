@@ -1,26 +1,14 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createClient } from "@/app/lib/supabase/server";
+import { createClient, createClientWithUser } from "@/app/lib/supabase/server";
 import { analyzeJournal } from "@/app/lib/analysis";
+import { refreshTodaysQuestions } from "@/app/lib/dailyQuestions";
 import { toAnalysis, type AnalysisRow } from "@/app/lib/db";
-import type {
-  AIAnalysis,
-  Journal,
-  Question,
-  UserProfile,
-} from "@/app/lib/types";
-
-async function getUserId() {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getClaims();
-  const userId = data?.claims.sub;
-  if (!userId) throw new Error("로그인이 필요해요");
-  return { supabase, userId };
-}
+import type { AIAnalysis, Journal, UserProfile } from "@/app/lib/types";
 
 export async function saveProfile(profile: Partial<UserProfile>) {
-  const { supabase, userId } = await getUserId();
+  const { supabase, userId } = await createClientWithUser();
   const { error } = await supabase
     .from("profiles")
     .update({
@@ -32,30 +20,19 @@ export async function saveProfile(profile: Partial<UserProfile>) {
   if (error) throw error;
 }
 
-/** 사용자가 고른 질문을 저장하고 DB id가 붙은 질문을 돌려줌 */
-export async function createQuestion(
-  question: Omit<Question, "id">,
-): Promise<Question> {
-  const { supabase, userId } = await getUserId();
-  const { data, error } = await supabase
-    .from("questions")
-    .insert({
-      user_id: userId,
-      content: question.content,
-      level: question.level,
-      type: question.type,
-    })
-    .select("id")
-    .single<{ id: string }>();
-  if (error) throw error;
-  return { ...question, id: data.id };
+/** 오늘의 질문을 새로 받음. 한도 초과는 예상 가능한 에러라 반환값으로 알림 */
+export async function refreshQuestions(): Promise<{ error: string | null }> {
+  const refreshed = await refreshTodaysQuestions();
+  return {
+    error: refreshed ? null : "오늘은 새 질문을 모두 받았어요. 내일 다시 만나요",
+  };
 }
 
 /** 글을 저장하고 새로 발급된 id를 돌려줌 */
 export async function createJournal(
   journal: Pick<Journal, "questionId" | "questionContent" | "level" | "content">,
 ): Promise<string> {
-  const { supabase, userId } = await getUserId();
+  const { supabase, userId } = await createClientWithUser();
   const { data, error } = await supabase
     .from("journals")
     .insert({
@@ -77,7 +54,7 @@ const ANALYSIS_COLUMNS = "summary, tone_keywords, message, is_safety_fallback";
 export async function analyzeAndSaveJournal(
   journalId: string,
 ): Promise<AIAnalysis> {
-  const { supabase } = await getUserId();
+  const { supabase } = await createClientWithUser();
 
   const { data: journal, error } = await supabase
     .from("journals")

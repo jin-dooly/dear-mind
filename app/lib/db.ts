@@ -4,6 +4,7 @@ import type {
   AIAnalysis,
   Journal,
   Level,
+  Question,
   UserProfile,
 } from "@/app/lib/types";
 
@@ -99,4 +100,15 @@ export async function getJournal(id: string): Promise<Journal | null> {
     .eq("id", id)
     .maybeSingle<JournalRow>();
   return data ? toJournal(data) : null;
+}
+
+/** 글쓰기 화면에서 보여줄 질문. 본인 질문이 아니거나 없으면 null */
+export async function getQuestion(id: string): Promise<Question | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("questions")
+    .select("id, content, level, type")
+    .eq("id", id)
+    .maybeSingle<Question>();
+  return data;
 }

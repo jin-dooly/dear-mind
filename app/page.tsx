@@ -2,7 +2,13 @@ import { MoonIcon } from "lucide-react";
 import { WindowFrame } from "@/app/components/WindowFrame";
 import { GoogleLoginButton } from "@/app/components/GoogleLoginButton";
 
-export default function MainPage() {
+export default async function MainPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
+
   return (
     <div className="relative p-7 flex flex-col min-h-screen items-center justify-center">
       <WindowFrame title="DEAR-MIND.EXE" className="w-full max-w-140 max-h-140">
@@ -14,7 +20,11 @@ export default function MainPage() {
             AI와 함께하는 자기성찰 기록
           </p>
 
-          <GoogleLoginButton />
+          <GoogleLoginButton
+            initialError={
+              error === "auth" ? "로그인하지 못했어요. 다시 시도해주세요" : null
+            }
+          />
         </div>
       </WindowFrame>
     </div>

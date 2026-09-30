@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { WindowFrame } from '@/app/components/WindowFrame';
 import { ChoiceButton } from '@/app/components/ChoiceButton';
 import { PrimaryButton } from '@/app/components/PrimaryButton';
+import { ErrorMessage } from '@/app/components/ErrorMessage';
 import { saveProfile, signOut } from '@/app/lib/actions';
 import type { AgeGroup, Level, UserProfile } from '@/app/lib/types';
 
@@ -21,13 +22,16 @@ export function SettingsForm({ profile }: { profile: UserProfile }) {
   const [ageGroup, setAgeGroup] = useState<AgeGroup>(profile.ageGroup);
   const [level, setLevel] = useState<Level>(profile.baseLevel);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSave() {
     setSaving(true);
+    setError(null);
     try {
       await saveProfile({ ageGroup, baseLevel: level });
       router.push('/home');
     } catch {
+      setError('저장하지 못했어요. 잠시 후 다시 시도해주세요');
       setSaving(false);
     }
   }
@@ -72,6 +76,7 @@ export function SettingsForm({ profile }: { profile: UserProfile }) {
           </div>
         </div>
 
+        <ErrorMessage className="mt-4">{error}</ErrorMessage>
         <PrimaryButton onClick={handleSave} disabled={saving} className="mt-4">
           {saving ? '저장 중...' : '저장하기'}
         </PrimaryButton>

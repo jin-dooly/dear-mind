@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { WindowFrame } from "@/app/components/WindowFrame";
 import { ChoiceButton } from "@/app/components/ChoiceButton";
 import { PrimaryButton } from "@/app/components/PrimaryButton";
+import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { saveProfile } from "@/app/lib/actions";
 import type { Level } from "@/app/lib/types";
 
@@ -43,11 +44,20 @@ const LEVELS: {
 export default function OnboardingLevelPage() {
   const router = useRouter();
   const [selected, setSelected] = useState<Level | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleDone() {
     if (!selected) return;
-    await saveProfile({ baseLevel: selected });
-    router.push("/home");
+    setSaving(true);
+    setError(null);
+    try {
+      await saveProfile({ baseLevel: selected });
+      router.push("/home");
+    } catch {
+      setError("저장하지 못했어요. 잠시 후 다시 시도해주세요");
+      setSaving(false);
+    }
   }
 
   return (
@@ -74,8 +84,9 @@ export default function OnboardingLevelPage() {
         </div>
 
         <div className="grow" />
-        <PrimaryButton onClick={handleDone} disabled={!selected}>
-          시작하기
+        <ErrorMessage className="mb-3">{error}</ErrorMessage>
+        <PrimaryButton onClick={handleDone} disabled={!selected || saving}>
+          {saving ? "저장 중..." : "시작하기"}
         </PrimaryButton>
       </WindowFrame>
     </div>

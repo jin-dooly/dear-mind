@@ -54,13 +54,20 @@ export function recommendLevel(recentJournals: Journal[], baseLevel: Level): Lev
   return mode;
 }
 
-/** N-1, N, N+1 레벨의 질문 3개를 오늘 날짜 기준으로 결정적으로 뽑아온다 (더미 구현, 추후 LLM Structured Output으로 교체) */
-export function getTodaysQuestions(centerLevel: Level, dateSeed: string): Question[] {
+/**
+ * N-1, N, N+1 레벨의 질문 3개를 날짜 기준으로 결정적으로 뽑아온다.
+ * batch(새로고침 횟수)만큼 밀어서 새로고침하면 다른 질문이 나오게 함.
+ * (더미 구현, 추후 LLM Structured Output으로 교체)
+ */
+export function generateQuestions(
+  centerLevel: Level,
+  dateSeed: string,
+  batch: number,
+): Omit<Question, 'id'>[] {
   const levels = [clampLevel(centerLevel - 1), centerLevel, clampLevel(centerLevel + 1)];
   return levels.map((level, i) => {
     const pool = BANK[level];
-    const index = hashToIndex(`${dateSeed}-${level}-${i}`, pool.length);
-    const content = pool[index];
-    return { id: `${level}-${index}`, content, level, type: 'daily' };
+    const index = (hashToIndex(`${dateSeed}-${level}-${i}`, pool.length) + batch) % pool.length;
+    return { content: pool[index], level, type: 'daily' };
   });
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { WindowFrame } from "@/app/components/WindowFrame";
 import { ChoiceButton } from "@/app/components/ChoiceButton";
 import { PrimaryButton } from "@/app/components/PrimaryButton";
+import { ErrorMessage } from "@/app/components/ErrorMessage";
 import { saveProfile } from "@/app/lib/actions";
 import type { AgeGroup } from "@/app/lib/types";
 
@@ -13,11 +14,20 @@ const AGE_GROUPS: AgeGroup[] = ["10대", "20대", "30대", "40대", "50대 이�
 export default function OnboardingAgePage() {
   const router = useRouter();
   const [selected, setSelected] = useState<AgeGroup | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleNext() {
     if (!selected) return;
-    await saveProfile({ ageGroup: selected });
-    router.push("/onboarding/level");
+    setSaving(true);
+    setError(null);
+    try {
+      await saveProfile({ ageGroup: selected });
+      router.push("/onboarding/level");
+    } catch {
+      setError("저장하지 못했어요. 잠시 후 다시 시도해주세요");
+      setSaving(false);
+    }
   }
 
   return (
@@ -38,8 +48,9 @@ export default function OnboardingAgePage() {
         </div>
 
         <div className="grow" />
-        <PrimaryButton onClick={handleNext} disabled={!selected}>
-          다음
+        <ErrorMessage className="mb-3">{error}</ErrorMessage>
+        <PrimaryButton onClick={handleNext} disabled={!selected || saving}>
+          {saving ? "저장 중..." : "다음"}
         </PrimaryButton>
       </WindowFrame>
     </div>

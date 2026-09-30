@@ -25,3 +25,12 @@ export async function createClient() {
     },
   );
 }
+
+/** 로그인한 사용자의 id가 필요한 쓰기 작업용 */
+export async function createClientWithUser() {
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getClaims();
+  const userId = data?.claims.sub;
+  if (!userId) throw new Error("로그인이 필요해요");
+  return { supabase, userId };
+}
