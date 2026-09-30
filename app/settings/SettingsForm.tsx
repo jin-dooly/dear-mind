@@ -35,14 +35,14 @@ export function SettingsForm({ profile }: { profile: UserProfile }) {
       });
       router.push('/home');
     } catch {
-      setError('저장하지 못했어요. 잠시 후 다시 시도해주세요');
+      setError('저장하지 못했어요. 잠시 후 다시 시도해 주세요');
       setSaving(false);
     }
   }
 
   return (
     <div className="p-7 flex flex-col min-h-screen">
-      <WindowFrame title="MY INFO" closeHref="/home">
+      <WindowFrame title="MY-INFO.EXE" closeHref="/home">
         <p className="text-[13px] text-muted mb-1">나이대와 기본 레벨을 다시 설정해요</p>
         <h1 className="font-jua text-lg text-ink mb-5">내 정보 변경</h1>
 

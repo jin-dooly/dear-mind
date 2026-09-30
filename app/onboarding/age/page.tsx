@@ -25,16 +25,16 @@ export default function OnboardingAgePage() {
       await saveProfile({ ageGroup: selected });
       router.push("/onboarding/level");
     } catch {
-      setError("저장하지 못했어요. 잠시 후 다시 시도해주세요");
+      setError("저장하지 못했어요. 잠시 후 다시 시도해 주세요");
       setSaving(false);
     }
   }
 
   return (
     <div className="relative p-7 flex flex-col min-h-screen items-center">
-      <WindowFrame title="ONBOARDING (1/2)" className="w-full max-w-200">
-        <p className="text-[13px] text-muted mb-1">먼저, 나이대를 알려주세요</p>
-        <h1 className="font-jua text-lg text-ink mb-6">몇 살이신가요?</h1>
+      <WindowFrame title="SETUP.EXE (1/2)" className="w-full max-w-200">
+        <p className="text-[13px] text-muted mb-1">나이대에 맞는 질문을 준비할게요</p>
+        <h1 className="font-jua text-lg text-ink mb-6">나이대를 알려 주세요</h1>
 
         <div className="flex flex-col gap-2.5">
           {AGE_GROUPS.map((age) => (

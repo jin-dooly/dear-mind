@@ -45,7 +45,7 @@ export function AnalysisResult({
         failed ? (
           <div className="mt-5 text-center">
             <p className="text-[13px] text-ink leading-relaxed">
-              분석을 불러오지 못했어요. 글은 저장되어 있어요.
+              분석을 불러오지 못했어요. 글은 저장되어 있어요
             </p>
             <button onClick={retry} className="mt-2 text-[12px] text-muted underline">
               다시 분석하기

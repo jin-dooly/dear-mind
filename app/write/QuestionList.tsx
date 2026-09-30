@@ -44,7 +44,7 @@ export function QuestionList({
           router.refresh();
         }
       } catch {
-        setError('질문을 새로 받지 못했어요. 잠시 후 다시 시도해주세요');
+        setError('질문을 새로 받지 못했어요. 잠시 후 다시 시도해 주세요');
       }
     });
   }

@@ -28,7 +28,7 @@ export default async function MainPage({
 
           <GoogleLoginButton
             initialError={
-              error === "auth" ? "로그인하지 못했어요. 다시 시도해주세요" : null
+              error === "auth" ? "로그인하지 못했어요. 다시 시도해 주세요" : null
             }
           />
         </div>

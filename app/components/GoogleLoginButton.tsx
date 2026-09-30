@@ -44,7 +44,7 @@ export function GoogleLoginButton({
       options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
     if (error) {
-      setError("로그인 화면으로 이동하지 못했어요. 다시 시도해주세요");
+      setError("로그인 화면으로 이동하지 못했어요. 다시 시도해 주세요");
       setLoading(false);
     }
   }

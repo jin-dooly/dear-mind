@@ -18,7 +18,7 @@ const LEVELS: {
   {
     level: 1,
     label: "Lv.1 가볍게",
-    description: "오늘 있었던 일을 가볍게 떠올려봐요",
+    description: "오늘 있었던 일을 가볍게 떠올려 봐요",
     color: "#DCEFFB",
   },
   {
@@ -55,16 +55,16 @@ export default function OnboardingLevelPage() {
       await saveProfile({ baseLevel: selected });
       router.push("/home");
     } catch {
-      setError("저장하지 못했어요. 잠시 후 다시 시도해주세요");
+      setError("저장하지 못했어요. 잠시 후 다시 시도해 주세요");
       setSaving(false);
     }
   }
 
   return (
     <div className="relative p-7 flex flex-col min-h-screen items-center">
-      <WindowFrame title="ONBOARDING (2/2)" className="w-full max-w-200" closeHref="/onboarding/age">
+      <WindowFrame title="SETUP.EXE (2/2)" className="w-full max-w-200" closeHref="/onboarding/age">
         <p className="text-[13px] text-muted mb-1">
-          이제, 기본 레벨을 골라주세요
+          이제 기본 레벨을 골라 주세요
         </p>
         <h1 className="font-jua text-lg text-ink mb-6">
           어느 정도 깊이로 시작할까요?

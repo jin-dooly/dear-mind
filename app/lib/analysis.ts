@@ -7,7 +7,7 @@ const SAFETY_FALLBACK: AIAnalysis = {
   summary: '',
   toneKeywords: [],
   message:
-    '지금 많이 힘든 시간을 보내고 계신 것 같아요. 혼자 견디지 않으셔도 괜찮습니다.\n' +
+    '지금 많이 힘든 시간을 보내고 계신 것 같아요. 혼자 견디지 않으셔도 괜찮아요.\n' +
     '자살예방상담전화 1393, 정신건강 위기상담전화 1577-0199로 언제든 연락하실 수 있어요.',
   isSafetyFallback: true,
 };
