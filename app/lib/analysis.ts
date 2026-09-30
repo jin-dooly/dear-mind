@@ -35,9 +35,9 @@ export function analyzeJournal(content: string): AIAnalysis {
   const keywords = [0, 1, 2].map((i) => KEYWORD_POOL[hashToIndex(`${content.length}-${i}-${content.slice(0, 5)}`, KEYWORD_POOL.length)]);
 
   return {
-    summary: '오늘의 기록에는 하루를 돌아보며 느낀 감정들이 담겨 있어요. 작은 순간들을 놓치지 않고 들여다본 시간이었네요.',
+    summary: '이번 기록에는 지금의 마음을 들여다보며 느낀 감정들이 담겨 있어요. 작은 순간들을 놓치지 않고 바라본 시간이었네요.',
     toneKeywords: Array.from(new Set(keywords)),
-    message: '오늘도 자신의 마음을 들여다봐 주셔서 고마워요. 내일도 편안한 하루가 되길 바라요.',
+    message: '정답이 없어도 괜찮아요. 지금의 나를 들여다봐 주셔서 고마워요.',
     isSafetyFallback: false,
   };
 }

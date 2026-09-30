@@ -15,7 +15,7 @@ export default async function RecordsPage() {
 
   return (
     <div className="p-7 flex flex-col min-h-screen">
-      <WindowFrame title="RECORDS">
+      <WindowFrame title="RECORDS" closeHref="/home">
         <p className="text-[13px] text-muted mb-1">지난 기록들을 다시 읽어보세요</p>
         <h1 className="font-jua text-lg text-ink mb-6">기록 보기</h1>
 

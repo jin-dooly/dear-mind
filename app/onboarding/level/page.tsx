@@ -62,7 +62,7 @@ export default function OnboardingLevelPage() {
 
   return (
     <div className="relative p-7 flex flex-col min-h-screen items-center">
-      <WindowFrame title="ONBOARDING (2/2)" className="w-full max-w-200">
+      <WindowFrame title="ONBOARDING (2/2)" className="w-full max-w-200" closeHref="/onboarding/age">
         <p className="text-[13px] text-muted mb-1">
           이제, 기본 레벨을 골라주세요
         </p>
