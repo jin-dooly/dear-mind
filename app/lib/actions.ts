@@ -7,6 +7,7 @@ import { refreshTodaysQuestions } from "@/app/lib/dailyQuestions";
 import { toAnalysis, type AnalysisRow } from "@/app/lib/db";
 import type { AIAnalysis, Journal, UserProfile } from "@/app/lib/types";
 
+/** 기본 레벨을 저장하면 레벨 변경 제안을 위한 집계를 처음부터 다시 셈 */
 export async function saveProfile(profile: Partial<UserProfile>) {
   const { supabase, userId } = await createClientWithUser();
   const { error } = await supabase
@@ -15,7 +16,19 @@ export async function saveProfile(profile: Partial<UserProfile>) {
       age_group: profile.ageGroup,
       base_level: profile.baseLevel,
       nickname: profile.nickname,
+      level_counted_since:
+        profile.baseLevel === undefined ? undefined : new Date().toISOString(),
     })
+    .eq("id", userId);
+  if (error) throw error;
+}
+
+/** 레벨 변경 제안 거절. 지금부터 다시 세어 같은 제안이 바로 다시 뜨지 않게 함 */
+export async function dismissLevelSuggestion() {
+  const { supabase, userId } = await createClientWithUser();
+  const { error } = await supabase
+    .from("profiles")
+    .update({ level_counted_since: new Date().toISOString() })
     .eq("id", userId);
   if (error) throw error;
 }

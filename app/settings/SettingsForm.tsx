@@ -28,7 +28,11 @@ export function SettingsForm({ profile }: { profile: UserProfile }) {
     setSaving(true);
     setError(null);
     try {
-      await saveProfile({ ageGroup, baseLevel: level });
+      // 레벨을 바꿨을 때만 저장해서, 나이대만 바꾼 경우 레벨 제안 집계가 초기화되지 않게 함
+      await saveProfile({
+        ageGroup,
+        baseLevel: level === profile.baseLevel ? undefined : level,
+      });
       router.push('/home');
     } catch {
       setError('저장하지 못했어요. 잠시 후 다시 시도해주세요');

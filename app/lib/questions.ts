@@ -1,4 +1,4 @@
-import type { Journal, Level, Question } from './types';
+import type { Level, Question } from './types';
 
 const BANK: Record<Level, string[]> = {
   1: [
@@ -31,43 +31,32 @@ function hashToIndex(seed: string, length: number) {
   return hash % length;
 }
 
-export function clampLevel(n: number): Level {
-  return Math.min(4, Math.max(1, n)) as Level;
-}
-
-/** 최근 기록(최근 5~7개) 중 level 최빈값. 기록 없으면 baseLevel 사용 */
-export function recommendLevel(recentJournals: Journal[], baseLevel: Level): Level {
-  const recent = recentJournals.slice(0, 7);
-  if (recent.length === 0) return baseLevel;
-
-  const counts = new Map<Level, number>();
-  for (const j of recent) counts.set(j.level, (counts.get(j.level) ?? 0) + 1);
-
-  let mode = baseLevel;
-  let max = 0;
-  for (const [level, count] of counts) {
-    if (count > max) {
-      max = count;
-      mode = level;
-    }
-  }
-  return mode;
+/** 세트에 넣을 레벨 3개: 2개는 기본 레벨 N, 1개는 N-1/N/N+1 중 랜덤 (1~4 범위 안에서) */
+function pickLevels(baseLevel: Level): Level[] {
+  const candidates = [baseLevel - 1, baseLevel, baseLevel + 1].filter(
+    (level): level is Level => level >= 1 && level <= 4,
+  );
+  const extra = candidates[Math.floor(Math.random() * candidates.length)];
+  return [baseLevel, baseLevel, extra].sort((a, b) => a - b);
 }
 
 /**
- * N-1, N, N+1 레벨의 질문 3개를 날짜 기준으로 결정적으로 뽑아온다.
+ * 기본 레벨 기준으로 질문 3개를 뽑아온다.
+ * 같은 레벨 질문이 겹치지 않도록 레벨마다 순서대로 다음 질문을 고르고,
  * batch(새로고침 횟수)만큼 밀어서 새로고침하면 다른 질문이 나오게 함.
  * (더미 구현, 추후 LLM Structured Output으로 교체)
  */
 export function generateQuestions(
-  centerLevel: Level,
+  baseLevel: Level,
   dateSeed: string,
   batch: number,
 ): Omit<Question, 'id'>[] {
-  const levels = [clampLevel(centerLevel - 1), centerLevel, clampLevel(centerLevel + 1)];
-  return levels.map((level, i) => {
+  const used = new Map<Level, number>();
+  return pickLevels(baseLevel).map((level) => {
+    const nth = used.get(level) ?? 0;
+    used.set(level, nth + 1);
     const pool = BANK[level];
-    const index = (hashToIndex(`${dateSeed}-${level}-${i}`, pool.length) + batch) % pool.length;
+    const index = (hashToIndex(`${dateSeed}-${level}`, pool.length) + batch + nth) % pool.length;
     return { content: pool[index], level, type: 'daily' };
   });
 }
