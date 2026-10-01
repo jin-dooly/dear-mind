@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { WindowFrame } from '@/app/components/WindowFrame';
 import { AnalysisResult } from '@/app/components/AnalysisResult';
@@ -8,18 +9,7 @@ export default async function AnalysisPage({ params }: { params: Promise<{ journ
   const { journalId } = await params;
   const journal = await getJournal(journalId);
 
-  if (!journal) {
-    return (
-      <div className="p-7 flex flex-col min-h-screen">
-        <WindowFrame title="ANALYSIS.EXE" closeHref="/home">
-          <p className="text-[13px] text-muted text-center mt-10">기록을 찾을 수 없어요</p>
-          <Link href="/home" className="text-[12px] text-ink underline mt-4 text-center">
-            홈으로 돌아가기
-          </Link>
-        </WindowFrame>
-      </div>
-    );
-  }
+  if (!journal) notFound();
 
   return (
     <div className="p-7 flex flex-col min-h-screen">

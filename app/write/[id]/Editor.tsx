@@ -8,9 +8,32 @@ import { ErrorMessage } from '@/app/components/ErrorMessage';
 import { createJournal } from '@/app/lib/actions';
 import type { Question } from '@/app/lib/types';
 
+// 질문마다 따로 임시 저장. 이 기기(브라우저)에만 남고 글을 저장하면 지움
+const draftKey = (questionId: string) => `dear-mind:draft:${questionId}`;
+
+function readDraft(questionId: string) {
+  try {
+    return window.localStorage.getItem(draftKey(questionId)) ?? '';
+  } catch {
+    return '';
+  }
+}
+
+function writeDraft(questionId: string, content: string) {
+  try {
+    if (content.trim()) window.localStorage.setItem(draftKey(questionId), content);
+    else window.localStorage.removeItem(draftKey(questionId));
+  } catch {
+    // 저장소를 쓸 수 없는 환경(시크릿 모드 등)에서는 임시 저장 없이 진행
+  }
+}
+
+/** ClientEditor를 통해 브라우저에서만 렌더링됨 (첫 렌더링부터 localStorage 사용) */
 export function Editor({ question }: { question: Question }) {
   const router = useRouter();
-  const [content, setContent] = useState('');
+  const [initialDraft] = useState(() => readDraft(question.id));
+  const [content, setContent] = useState(initialDraft);
+  const restored = initialDraft.length > 0;
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,6 +48,7 @@ export function Editor({ question }: { question: Question }) {
         level: question.level,
         content,
       });
+      writeDraft(question.id, '');
       // 뒤로 가기로 에디터에 돌아와 같은 글을 다시 저장하지 않도록 replace
       router.replace(`/write/analysis/${journalId}`);
     } catch {
@@ -40,11 +64,17 @@ export function Editor({ question }: { question: Question }) {
 
         <textarea
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => {
+            setContent(e.target.value);
+            writeDraft(question.id, e.target.value);
+          }}
           placeholder="떠오르는 생각을 편하게 적어 보세요"
-          className="w-full grow min-h-[240px] resize-none rounded-xl border-2 border-[#C7CDEB] bg-white p-4 text-[13px] leading-relaxed text-ink outline-none focus:border-ink-dark"
+          className="w-full grow min-h-60 resize-none rounded-xl border-2 border-[#C7CDEB] bg-white p-4 text-[13px] leading-relaxed text-ink outline-none focus:border-ink-dark"
         />
-        <p className="text-[11px] text-muted text-right mt-1.5 mb-4">{content.length}자</p>
+        <div className="flex justify-between gap-3 text-[11px] text-muted mt-1.5 mb-4">
+          <span>{restored ? '임시 저장된 글을 불러왔어요' : '쓰는 내용은 이 기기에 임시 저장돼요'}</span>
+          <span className="shrink-0">{content.length}자</span>
+        </div>
 
         <ErrorMessage className="mb-3">{error}</ErrorMessage>
         <PrimaryButton onClick={handleSubmit} disabled={content.trim().length === 0 || submitting}>

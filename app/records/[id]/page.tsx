@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { WindowFrame } from '@/app/components/WindowFrame';
 import { AnalysisResult } from '@/app/components/AnalysisResult';
 import { getJournal } from '@/app/lib/db';
@@ -8,18 +8,7 @@ export default async function RecordDetailPage({ params }: { params: Promise<{ i
   const { id } = await params;
   const journal = await getJournal(id);
 
-  if (!journal) {
-    return (
-      <div className="p-7 flex flex-col min-h-screen">
-        <WindowFrame title="RECORD.TXT" closeHref="/records">
-          <p className="text-[13px] text-muted text-center mt-10">기록을 찾을 수 없어요</p>
-          <Link href="/records" className="text-[12px] text-ink underline mt-4 text-center">
-            목록으로 돌아가기
-          </Link>
-        </WindowFrame>
-      </div>
-    );
-  }
+  if (!journal) notFound();
 
   return (
     <div className="p-7 flex flex-col min-h-screen">
