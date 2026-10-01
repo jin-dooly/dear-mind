@@ -17,6 +17,7 @@ export function SettingsForm({ profile }: { profile: UserProfile }) {
   const [ageGroup, setAgeGroup] = useState<AgeGroup>(profile.ageGroup);
   const [level, setLevel] = useState<Level>(profile.baseLevel);
   const [saving, setSaving] = useState(false);
+  const changed = ageGroup !== profile.ageGroup || level !== profile.baseLevel;
   const [error, setError] = useState<string | null>(null);
 
   async function handleSave() {
@@ -50,7 +51,7 @@ export function SettingsForm({ profile }: { profile: UserProfile }) {
                   key={age}
                   onClick={() => setAgeGroup(age)}
                   className={`rounded-full border-2 px-3 py-1.5 text-[12px] font-jua transition-colors ${
-                    ageGroup === age ? 'border-ink-dark bg-sky-light text-ink' : 'border-[#C7CDEB] bg-white text-muted'
+                    ageGroup === age ? 'border-line bg-sky-light text-ink' : 'border-line-soft bg-white text-muted'
                   }`}
                 >
                   {age}
@@ -76,7 +77,7 @@ export function SettingsForm({ profile }: { profile: UserProfile }) {
         </div>
 
         <ErrorMessage className="mt-4">{error}</ErrorMessage>
-        <PrimaryButton onClick={handleSave} disabled={saving} className="mt-4">
+        <PrimaryButton onClick={handleSave} disabled={!changed || saving} className="mt-4">
           {saving ? '저장 중...' : '저장하기'}
         </PrimaryButton>
         <button

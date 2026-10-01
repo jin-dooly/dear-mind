@@ -11,7 +11,7 @@ export function SkeletonBlock({ className = '' }: { className?: string }) {
 /** 카드 모양 스켈레톤 (질문·기록 카드와 같은 틀) */
 export function SkeletonCard({ children }: { children?: ReactNode }) {
   return (
-    <div className="w-full rounded-xl border-2 border-[#C7CDEB] bg-white px-4 py-3.5 flex flex-col gap-2">
+    <div className="w-full rounded-xl border-2 border-line-soft bg-white px-4 py-3.5 flex flex-col gap-2">
       {children ?? (
         <>
           <SkeletonBlock className="h-3.5 w-12 rounded-full" />

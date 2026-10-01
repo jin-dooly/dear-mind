@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { ErrorMessage } from '@/app/components/ErrorMessage';
+import { PRIMARY_SURFACE_CLASS } from '@/app/components/PrimaryButton';
 import { dismissLevelSuggestion, saveProfile } from '@/app/lib/actions';
 import type { LevelSuggestion } from '@/app/lib/levelSuggestion';
 import { LEVEL_INFO, levelLabel } from '@/app/lib/levels';
@@ -27,7 +28,7 @@ export function LevelSuggestionBanner({ suggestion }: { suggestion: LevelSuggest
   }
 
   return (
-    <div className="rounded-xl border-2 border-ink-dark bg-sky-light/60 p-3.5 mb-5">
+    <div className="rounded-xl border-2 border-line bg-sky-light/60 p-3.5 mb-5">
       <p className="text-[12px] text-ink leading-relaxed">
         요즘 {deeper ? '더 깊은' : '더 가벼운'} 질문을 자주 고르셨네요.
         <br />
@@ -43,14 +44,14 @@ export function LevelSuggestionBanner({ suggestion }: { suggestion: LevelSuggest
         <button
           onClick={() => respond(true)}
           disabled={pending}
-          className="rounded-full border-2 border-ink-dark bg-folder-purple-back px-3 py-1 text-[12px] font-jua text-white disabled:opacity-60"
+          className={`rounded-full px-3 py-1 text-[12px] ${PRIMARY_SURFACE_CLASS} disabled:opacity-60`}
         >
           바꾸기
         </button>
         <button
           onClick={() => respond(false)}
           disabled={pending}
-          className="rounded-full border-2 border-[#C7CDEB] bg-white px-3 py-1 text-[12px] font-jua text-muted disabled:opacity-60"
+          className="rounded-full border-2 border-line-soft bg-white px-3 py-1 text-[12px] font-jua text-muted disabled:opacity-60"
         >
           지금이 좋아요
         </button>

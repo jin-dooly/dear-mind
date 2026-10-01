@@ -67,7 +67,7 @@ export function AnalysisResult({
             {analysis.toneKeywords.map((kw) => (
               <span
                 key={kw}
-                className="rounded-full border border-folder-purple-back bg-folder-purple-front/40 px-2.5 py-1 text-[11px] font-jua text-folder-purple-text"
+                className="rounded-full border border-line bg-folder-purple-front/40 px-2.5 py-1 text-[11px] font-jua text-folder-purple-text"
               >
                 #{kw}
               </span>

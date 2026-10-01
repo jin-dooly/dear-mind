@@ -5,7 +5,7 @@ export default function RecordDetailLoading() {
     <WindowSkeleton title="RECORD.TXT" closeHref="/records">
       <SkeletonBlock className="h-3 w-24 mb-2" />
       <SkeletonBlock className="h-3.5 w-full mb-4" />
-      <div className="rounded-xl border-2 border-[#C7CDEB] bg-white p-3.5 mb-5 flex flex-col gap-2">
+      <div className="rounded-xl border-2 border-line-soft bg-white p-3.5 mb-5 flex flex-col gap-2">
         <SkeletonBlock className="h-3 w-full" />
         <SkeletonBlock className="h-3 w-full" />
         <SkeletonBlock className="h-3 w-3/4" />

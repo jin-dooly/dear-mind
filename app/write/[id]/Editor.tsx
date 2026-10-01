@@ -69,7 +69,7 @@ export function Editor({ question }: { question: Question }) {
             writeDraft(question.id, e.target.value);
           }}
           placeholder="떠오르는 생각을 편하게 적어 보세요"
-          className="w-full grow min-h-60 resize-none rounded-xl border-2 border-[#C7CDEB] bg-white p-4 text-[13px] leading-relaxed text-ink outline-none focus:border-ink-dark"
+          className="w-full grow min-h-60 resize-none rounded-xl border-2 border-line-soft bg-white p-4 text-[13px] leading-relaxed text-ink outline-none focus:border-line"
         />
         <div className="flex justify-between gap-3 text-[11px] text-muted mt-1.5 mb-4">
           <span>{restored ? '임시 저장된 글을 불러왔어요' : '쓰는 내용은 이 기기에 임시 저장돼요'}</span>

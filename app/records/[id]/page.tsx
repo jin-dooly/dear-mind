@@ -17,7 +17,7 @@ export default async function RecordDetailPage({ params }: { params: Promise<{ i
         <span className="text-[11px] text-muted mb-1">{levelLabel(journal.level)} · 그날의 질문</span>
         <p className="text-[13px] text-ink leading-relaxed mb-4">{journal.questionContent}</p>
 
-        <p className="text-[13px] text-ink leading-relaxed mb-5 rounded-xl bg-white border-2 border-[#C7CDEB] p-3.5 whitespace-pre-line">
+        <p className="text-[13px] text-ink leading-relaxed mb-5 rounded-xl bg-white border-2 border-line-soft p-3.5 whitespace-pre-line">
           {journal.content}
         </p>
 

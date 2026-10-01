@@ -11,7 +11,7 @@ export default async function HomePage() {
 
   return (
     <div className="p-7 flex flex-col min-h-screen items-center justify-center">
-      <WindowFrame title="HOME.EXE" className="w-fit h-fit grow-0">
+      <WindowFrame title="HOME.EXE" className="w-full max-w-[347px] h-fit grow-0">
         <div className="p-2 pb-4">
           <h1 className="font-jua text-xl text-ink mb-1">{greeting}</h1>
           <p className="text-[13px] text-muted mb-5">

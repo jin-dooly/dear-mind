@@ -15,6 +15,13 @@
   /* 보조 텍스트: 창 배경 위 대비 4.5:1 (WCAG AA) */
   --color-muted: #6a6fac;
 
+  /* primary 버튼 배경 (로그인 버튼 색) */
+  --color-primary: #a0b5ec;
+
+  /* 테두리: 창 프레임 색(line)보다 진한 테두리는 쓰지 않음 */
+  --color-line: #8b96c7;
+  --color-line-soft: #c7cdeb;
+
   /* 흰 글씨 버튼 배경으로도 쓰여 대비 4.5:1 맞춤 */
   --color-folder-purple-back: #8466ba;
   --color-folder-purple-front: #c9b8ea;
@@ -35,7 +42,7 @@
   --color-level-1: #dceffb;
   --color-level-2: #e3e3fb;
   --color-level-3: #f0d9f5;
-  --color-level-4: #b39de5;
+  --color-level-4: #beaae8;
 
   /* 로딩 애니메이션 */
   --color-skeleton: #e6e3f7;
@@ -75,12 +82,26 @@
   }
 }
 
-/* 키보드로 이동할 때만 보이는 공통 포커스 표시 */
 @layer base {
+  /* Tailwind v4는 버튼 커서 기본값이 default라, 누를 수 있는 버튼은 손가락 커서로 되돌림 */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* 키보드로 이동할 때만 보이는 공통 포커스 표시 */
   :focus-visible {
     outline: 2px solid var(--color-ink-dark);
     outline-offset: 2px;
   }
+}
+
+/* 창 안쪽 스크롤 영역: 스크롤은 되지만 스크롤바는 숨김 */
+.window-scroll {
+  scrollbar-width: none;
+}
+.window-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-color-scheme: dark) {
