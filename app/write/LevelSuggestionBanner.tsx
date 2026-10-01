@@ -5,21 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ErrorMessage } from '@/app/components/ErrorMessage';
 import { dismissLevelSuggestion, saveProfile } from '@/app/lib/actions';
 import type { LevelSuggestion } from '@/app/lib/levelSuggestion';
-
-const LEVEL_LABEL: Record<number, string> = {
-  1: '가볍게',
-  2: '조금 더',
-  3: '깊게',
-  4: '아주 깊게',
-};
-
-// 온보딩 레벨 설명과 같은 문구
-const LEVEL_DESCRIPTION: Record<number, string> = {
-  1: '오늘 있었던 일을 가볍게 떠올려 봐요',
-  2: '요즘 드는 생각을 조금 더 들여다봐요',
-  3: '마음 한 켠의 감정을 깊게 마주해요',
-  4: '나 자신에 대해 아주 깊이 성찰해요',
-};
+import { LEVEL_INFO, levelLabel } from '@/app/lib/levels';
 
 export function LevelSuggestionBanner({ suggestion }: { suggestion: LevelSuggestion }) {
   const router = useRouter();
@@ -51,7 +37,7 @@ export function LevelSuggestionBanner({ suggestion }: { suggestion: LevelSuggest
         {suggestion.to === 3 ? '으로' : '로'} 바꿀까요?
       </p>
       <p className="text-[11px] text-muted mt-1">
-        Lv.{suggestion.to} {LEVEL_LABEL[suggestion.to]} · {LEVEL_DESCRIPTION[suggestion.to]}
+        {levelLabel(suggestion.to)} · {LEVEL_INFO[suggestion.to].description}
       </p>
       <div className="flex gap-2 mt-3">
         <button

@@ -5,16 +5,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
 import { ErrorMessage } from '@/app/components/ErrorMessage';
+import { LevelBadge } from '@/app/components/LevelBadge';
 import { RetroProgressBar } from '@/app/components/RetroProgressBar';
 import { refreshQuestions } from '@/app/lib/actions';
 import type { Question } from '@/app/lib/types';
-
-const LEVEL_COLOR: Record<number, string> = {
-  1: '#DCEFFB',
-  2: '#E3E3FB',
-  3: '#F0D9F5',
-  4: '#C9B8EA',
-};
 
 export function QuestionList({
   sets,
@@ -69,12 +63,7 @@ export function QuestionList({
               pending ? 'pointer-events-none opacity-30' : ''
             }`}
           >
-            <span
-              className="inline-block rounded-full px-2 py-0.5 text-[10px] font-jua text-ink-dark mb-2"
-              style={{ backgroundColor: LEVEL_COLOR[q.level] }}
-            >
-              Lv.{q.level}
-            </span>
+            <LevelBadge level={q.level} className="mb-2" />
             <span className="block text-[13px] text-ink leading-relaxed">{q.content}</span>
           </Link>
         ))}

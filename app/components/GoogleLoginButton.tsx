@@ -54,7 +54,7 @@ export function GoogleLoginButton({
       <button
         onClick={handleLogin}
         disabled={loading}
-        className="w-full max-w-80 flex items-center justify-center gap-2.5 rounded-xl border-2 border-[#8B96C7] bg-[#A0B5EC] px-5 py-3.5 font-jua text-[15px] text-white transition-transform active:translate-y-0.5 disabled:opacity-60"
+        className="w-full max-w-80 flex items-center justify-center gap-2.5 rounded-xl border-2 border-[#8B96C7] bg-[#A0B5EC] px-5 py-3.5 font-jua text-[15px] text-ink-dark transition-transform active:translate-y-0.5 disabled:opacity-60"
       >
         {/* Google 브랜딩 가이드: 로고는 원래 색 그대로, 흰 바탕 위에 */}
         <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white">

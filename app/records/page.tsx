@@ -1,15 +1,9 @@
 import Link from "next/link";
 import { WindowFrame } from "@/app/components/WindowFrame";
 import { PrimaryLink } from "@/app/components/PrimaryButton";
+import { LevelBadge } from "@/app/components/LevelBadge";
 import { getJournals } from "@/app/lib/db";
 import { formatDate } from "@/app/lib/format";
-
-const LEVEL_COLOR: Record<number, string> = {
-  1: "#DCEFFB",
-  2: "#E3E3FB",
-  3: "#F0D9F5",
-  4: "#C9B8EA",
-};
 
 export default async function RecordsPage() {
   const journals = await getJournals();
@@ -43,12 +37,7 @@ export default async function RecordsPage() {
               className="w-full rounded-xl border-2 border-ink-dark bg-white px-4 py-3.5 text-left"
             >
               <div className="flex items-center justify-between mb-1.5">
-                <span
-                  className="inline-block rounded-full px-2 py-0.5 text-[10px] font-jua text-ink-dark"
-                  style={{ backgroundColor: LEVEL_COLOR[j.level] }}
-                >
-                  Lv.{j.level}
-                </span>
+                <LevelBadge level={j.level} />
                 <span className="text-[11px] text-muted">
                   {formatDate(j.createdAt)}
                 </span>

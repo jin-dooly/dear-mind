@@ -30,11 +30,13 @@ sky-light:  #DCE9FB
 sky-dark:   #ECE3FB
 ink:        #4A5480   (기본 텍스트)
 ink-dark:   #2E2A45   (아웃라인, 진한 텍스트)
-muted:      #8B8FBE   (보조 텍스트)
+muted:      #6A6FAC   (보조 텍스트, 창 배경 대비 4.5:1)
 
-folder.purple: back #8B6FBE / front #C9B8EA / text #4A3B7A / sub #7A63A8   (작성하기)
-folder.pink:   back #D98FB0 / front #F7C6DA / text #8A3F5E / sub #B4658A   (기록 보기)
-folder.mint:   back #5FAE85 / front #B9E8D0 / text #2E6B4A / sub #3E8564   (내 정보 변경)
+folder.purple: back #8466BA / front #C9B8EA / text #4A3B7A / sub #57457C   (작성하기)
+folder.pink:   back #D98FB0 / front #F7C6DA / text #8A3F5E / sub #8B4465   (기록 보기)
+folder.mint:   back #5FAE85 / front #B9E8D0 / text #2E6B4A / sub #326B50   (내 정보 변경)
+
+level:  Lv1 #DCEFFB / Lv2 #E3E3FB / Lv3 #F0D9F5 / Lv4 #B39DE5   (app/lib/levels.ts, --color-level-N)
 ```
 
 ### 완성된 목업 (참고용)

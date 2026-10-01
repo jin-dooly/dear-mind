@@ -8,13 +8,13 @@ const schemes: Record<
   { back: string; front: string; text: string; sub: string }
 > = {
   purple: {
-    back: "#8B6FBE",
+    back: "#8466BA",
     front: "#C9B8EA",
     text: "#4A3B7A",
-    sub: "#7A63A8",
+    sub: "#57457C",
   },
-  pink: { back: "#D98FB0", front: "#F7C6DA", text: "#8A3F5E", sub: "#B4658A" },
-  mint: { back: "#5FAE85", front: "#B9E8D0", text: "#2E6B4A", sub: "#3E8564" },
+  pink: { back: "#D98FB0", front: "#F7C6DA", text: "#8A3F5E", sub: "#8B4465" },
+  mint: { back: "#5FAE85", front: "#B9E8D0", text: "#2E6B4A", sub: "#326B50" },
 };
 
 export function FolderMenuItem({

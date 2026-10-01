@@ -7,15 +7,10 @@ import { ChoiceButton } from '@/app/components/ChoiceButton';
 import { PrimaryButton } from '@/app/components/PrimaryButton';
 import { ErrorMessage } from '@/app/components/ErrorMessage';
 import { saveProfile, signOut } from '@/app/lib/actions';
+import { LEVELS, levelBgClass, levelLabel } from '@/app/lib/levels';
 import type { AgeGroup, Level, UserProfile } from '@/app/lib/types';
 
 const AGE_GROUPS: AgeGroup[] = ['10대', '20대', '30대', '40대', '50대 이상'];
-const LEVELS: { level: Level; label: string; color: string }[] = [
-  { level: 1, label: 'Lv.1 가볍게', color: '#DCEFFB' },
-  { level: 2, label: 'Lv.2 조금 더', color: '#E3E3FB' },
-  { level: 3, label: 'Lv.3 깊게', color: '#F0D9F5' },
-  { level: 4, label: 'Lv.4 아주 깊게', color: '#C9B8EA' },
-];
 
 export function SettingsForm({ profile }: { profile: UserProfile }) {
   const router = useRouter();
@@ -67,13 +62,13 @@ export function SettingsForm({ profile }: { profile: UserProfile }) {
           <div>
             <p className="text-[12px] font-jua text-muted mb-2">기본 레벨</p>
             <div className="flex flex-col gap-2">
-              {LEVELS.map(({ level: l, label, color }) => (
+              {LEVELS.map((l) => (
                 <ChoiceButton
                   key={l}
-                  label={label}
+                  label={levelLabel(l)}
                   selected={level === l}
                   onClick={() => setLevel(l)}
-                  accentColor={color}
+                  selectedClassName={levelBgClass(l)}
                 />
               ))}
             </div>

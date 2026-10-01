@@ -12,28 +12,30 @@
   --color-sky-dark: #ece3fb;
   --color-ink: #4a5480;
   --color-ink-dark: #2e2a45;
-  --color-muted: #8b8fbe;
+  /* 보조 텍스트: 창 배경 위 대비 4.5:1 (WCAG AA) */
+  --color-muted: #6a6fac;
 
-  --color-folder-purple-back: #8b6fbe;
+  /* 흰 글씨 버튼 배경으로도 쓰여 대비 4.5:1 맞춤 */
+  --color-folder-purple-back: #8466ba;
   --color-folder-purple-front: #c9b8ea;
   --color-folder-purple-text: #4a3b7a;
-  --color-folder-purple-sub: #7a63a8;
+  --color-folder-purple-sub: #57457c;
 
   --color-folder-pink-back: #d98fb0;
   --color-folder-pink-front: #f7c6da;
   --color-folder-pink-text: #8a3f5e;
-  --color-folder-pink-sub: #b4658a;
+  --color-folder-pink-sub: #8b4465;
 
   --color-folder-mint-back: #5fae85;
   --color-folder-mint-front: #b9e8d0;
   --color-folder-mint-text: #2e6b4a;
-  --color-folder-mint-sub: #3e8564;
+  --color-folder-mint-sub: #326b50;
 
   /* 레벨(1~4) 그라데이션 — 가볍게(하늘색) -> 깊게(진보라) */
   --color-level-1: #dceffb;
   --color-level-2: #e3e3fb;
   --color-level-3: #f0d9f5;
-  --color-level-4: #c9b8ea;
+  --color-level-4: #b39de5;
 
   /* 로딩 애니메이션 */
   --color-skeleton: #e6e3f7;
@@ -70,6 +72,14 @@
     40% {
       opacity: 1;
     }
+  }
+}
+
+/* 키보드로 이동할 때만 보이는 공통 포커스 표시 */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-ink-dark);
+    outline-offset: 2px;
   }
 }
 

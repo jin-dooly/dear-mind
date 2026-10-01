@@ -74,7 +74,7 @@ export function AnalysisResult({
             ))}
           </div>
 
-          <p className="text-[12px] text-muted leading-relaxed mt-4 rounded-xl bg-sky-light/60 p-3.5">
+          <p className="text-[12px] text-ink leading-relaxed mt-4 rounded-xl bg-sky-light/60 p-3.5">
             {analysis.message}
           </p>
         </>

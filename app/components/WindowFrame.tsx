@@ -37,7 +37,7 @@ export function WindowFrame({
               href={closeHref}
               aria-label="닫기"
               title="닫기"
-              className={`${CONTROL_CLASS} bg-[#F5C9D9] hover:bg-[#EFA9C2] hover:text-ink-dark focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ink-dark`}
+              className={`${CONTROL_CLASS} bg-[#F5C9D9] hover:bg-[#EFA9C2] hover:text-ink-dark`}
             >
               <X {...ICON_PROPS} />
             </Link>
