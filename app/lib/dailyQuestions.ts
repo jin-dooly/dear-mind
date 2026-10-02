@@ -1,12 +1,12 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClientWithUser } from "@/app/lib/supabase/server";
-import { getProfile } from "@/app/lib/db";
+import { getJournals, getProfile } from "@/app/lib/db";
 import { todayKST } from "@/app/lib/format";
 import { generateQuestions } from "@/app/lib/questions";
 import type { Level, Question } from "@/app/lib/types";
 
 /** 하루에 질문을 새로 받을 수 있는 횟수 */
-export const MAX_DAILY_REFRESH = 3;
+export const MAX_DAILY_REFRESH = 2;
 
 export type TodaysQuestions = {
   /** 오늘 받은 세트들. 받은 순서대로이고 마지막이 가장 최근 세트 */
@@ -52,9 +52,28 @@ async function createSet(
   userId: string,
   date: string,
   batch: number,
+  /** 오늘 이미 받은 질문들. 새 세트가 겹치지 않게 함 */
+  todaysQuestions: string[],
 ) {
-  const profile = await getProfile();
-  const rows = generateQuestions(profile.baseLevel, date, batch).map((q, position) => ({
+  const [profile, recentJournals] = await Promise.all([
+    getProfile(),
+    getJournals(10),
+  ]);
+  const avoid = [
+    ...new Set([
+      ...todaysQuestions,
+      ...recentJournals.map((j) => j.questionContent),
+    ]),
+  ];
+
+  const questions = await generateQuestions({
+    ageGroup: profile.ageGroup,
+    baseLevel: profile.baseLevel,
+    dateSeed: date,
+    batch,
+    avoid,
+  });
+  const rows = questions.map((q, position) => ({
     user_id: userId,
     content: q.content,
     level: q.level,
@@ -78,7 +97,7 @@ export async function getOrCreateTodaysQuestions(): Promise<TodaysQuestions> {
 
   let sets = await getTodaysSets(supabase, userId, date);
   if (sets.length === 0) {
-    await createSet(supabase, userId, date, 0);
+    await createSet(supabase, userId, date, 0, []);
     sets = await getTodaysSets(supabase, userId, date);
     if (sets.length === 0) throw new Error("질문을 만들지 못했어요");
   }
@@ -94,9 +113,16 @@ export async function refreshTodaysQuestions(): Promise<boolean> {
   const { supabase, userId } = await createClientWithUser();
   const date = todayKST();
 
-  const nextBatch = (await getTodaysSets(supabase, userId, date)).length;
+  const sets = await getTodaysSets(supabase, userId, date);
+  const nextBatch = sets.length;
   if (nextBatch > MAX_DAILY_REFRESH) return false;
 
-  await createSet(supabase, userId, date, nextBatch);
+  await createSet(
+    supabase,
+    userId,
+    date,
+    nextBatch,
+    sets.flat().map((q) => q.content),
+  );
   return true;
 }

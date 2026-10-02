@@ -13,7 +13,7 @@ Claude Code는 이 문서를 읽고 아래 "다음 할 일"부터 이어서 작�
 - Frontend: React + TypeScript, Next.js (App Router)
 - Backend: Next.js API Route
 - DB/Auth: Supabase (PostgreSQL + Auth, Google OAuth 단일 로그인)
-- AI: LLM API + Structured Output (JSON Schema)
+- AI: Claude Sonnet 5.5 (`@anthropic-ai/sdk`) + Structured Output (Zod 스키마), `ANTHROPIC_API_KEY` 필요
 - Deployment: Vercel + Supabase
 
 ## 디자인 컨셉 (확정)
@@ -73,13 +73,15 @@ level:  Lv1 #DCEFFB / Lv2 #E3E3FB / Lv3 #F0D9F5 / Lv4 #BEAAE8   (app/lib/levels.
 
 ## 핵심 기능 로직
 - **질문 레벨**: 사용자가 설정한 기본 레벨(N) 기준으로 3개 중 2개는 N, 1개는 N-1/N/N+1 중 랜덤. 질문 화면에 레벨 탭 선택 UI는 없음.
-- **오늘의 질문 세트**: 하루에 받은 세트를 저장해 재사용. "다른 질문 받기"는 하루 3회, 오늘 받은 이전 세트는 넘겨 보며 답할 수 있음. 날짜는 KST 기준.
+- **오늘의 질문 세트**: 하루에 받은 세트를 저장해 재사용. "다른 질문 받기"는 하루 2회(`MAX_DAILY_REFRESH`), 오늘 받은 이전 세트는 넘겨 보며 답할 수 있음. 날짜는 KST 기준.
 - **레벨 변경 제안**: 기본 레벨 설정(또는 제안 수락/거절) 이후 쓴 최근 글 5개 중 4개 이상이 기본 레벨보다 높거나 낮은 질문이면, 질문 화면 상단에 한 단계 올리기/내리기를 제안. 자동 변경은 하지 않음 (`profiles.level_counted_since` 이후 글만 집계).
-- **질문 생성**: LLM에 (나이대, 레벨 N-1/N/N+1)을 넘겨 Structured Output으로 질문 3개를 한 번에 받음.
+- **질문 생성**: 레벨 구성은 코드가 정하고, LLM에 (나이대, 레벨 목록, 최근 받은 질문)을 넘겨 Structured Output으로 질문 3개를 한 번에 받음. 실패 시 질문 은행으로 대체.
 - **AI 분석 응답 스키마**:
   ```json
   { "summary": "...", "tone_keywords": ["...", "...", "..."], "message": "..." }
   ```
+  - summary: 글을 다시 풀어 쓰지 않고, 글 밑에 깔린 마음을 짚는 짧은 알아차림. 200자 미만 글은 한 문장, 그 이상은 한두 문장, 원문의 1/3 이내
+  - tone_keywords: 정해진 감정 단어 40개(`app/lib/emotions.ts`) 안에서만 3개 선택 (스키마 enum으로 강제). 사람·성격을 평가하는 단어, 진단처럼 들리는 단어는 목록에 없음
 - **안전 설계**: 자해/위기 암시 표현 감지 시 AI 분석 대신 고정 안내 문구(전문기관 연락처)로 대체하는 룰 기반 필터. AI는 진단·상담을 하지 않음.
 - **실패 처리**: LLM 응답 실패/스키마 불일치 시 1회 재시도 후 안내 문구로 폴백. 질문 재생성(새로고침)에는 일일 한도.
 
@@ -92,6 +94,7 @@ level:  Lv1 #DCEFFB / Lv2 #E3E3FB / Lv3 #F0D9F5 / Lv4 #BEAAE8   (app/lib/levels.
 ## MVP 범위 (이번 스프린트에 포함)
 포함: 로그인, 온보딩, 홈 메뉴, 오늘의 질문 3개, 글쓰기/저장, AI 분석/피드백, 기록 조회
 제외(향후 확장): 월간 AI 회고, Embedding/Vector DB/RAG, 감정 점수화, 전문 상담 기능
+다음 스프린트: 키워드 칩 색을 감정 분류(밝음/잔잔함/나아감/무거움, `EMOTION_GROUPS`)별로 나누기
 
 ## 이미 작성된 코드 (첨부 파일 참고)
 - `tailwind.config.snippet.ts` — 색상/폰트 토큰
@@ -99,13 +102,14 @@ level:  Lv1 #DCEFFB / Lv2 #E3E3FB / Lv3 #F0D9F5 / Lv4 #BEAAE8   (app/lib/levels.
 - `components/WindowFrame.tsx` — 공통 창 프레임
 - `components/FolderMenuItem.tsx` — 홈 화면 폴더 메뉴 컴포넌트
 
+## 진행 상황
+1~7단계(스니펫 통합, 전체 화면, Supabase 인증·저장, LLM 연동, Vercel 배포) 완료.
+UI 다듬기 체크리스트(내비게이션, UX 라이팅, 로딩·빈 화면·에러, 시각 일관성, 접근성, 반응형)도 완료.
+
 ## 다음 할 일 (Claude Code가 이어서 할 작업)
-1. 위 코드 스니펫들을 실제 Next.js 프로젝트(`dear-mind`)에 통합
-2. Main(로그인) → Home → Onboarding 순으로 페이지 코딩 (더미 데이터로 먼저 완성, Supabase 연동은 이후)
-3. Questions, Editor, Analysis, Records, RecordDetail 페이지 순서로 이어서 작업
-4. 아이콘은 `lucide-react`의 Pencil/BookOpen/Settings로 대체 가능
-5. 전체 완성 후 Supabase Auth(Google OAuth) + 기록 CRUD 연동
-6. 이후 LLM API 연동 (질문 생성, 글 분석) — Structured Output 스키마는 위 참고
-7. Vercel 배포
+1. 키워드 칩 색을 감정 분류(밝음/잔잔함/나아감/무거움)별로 나누기
+2. 방향을 고르는 새로고침 (더 가볍게 / 비슷하게 / 더 깊게)
+3. 기록 캘린더 보기
+4. (향후 확장) 월간 AI 회고, 감정 점수화
 
 각 단계에서 이 문서의 디자인 토큰과 컴포넌트 구조를 최대한 재사용해서, 화면마다 스타일을 새로 짜지 않도록 해주세요.

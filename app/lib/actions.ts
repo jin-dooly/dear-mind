@@ -71,13 +71,20 @@ export async function analyzeAndSaveJournal(
 
   const { data: journal, error } = await supabase
     .from("journals")
-    .select(`content, ai_analyses(${ANALYSIS_COLUMNS})`)
+    .select(`content, question_content, ai_analyses(${ANALYSIS_COLUMNS})`)
     .eq("id", journalId)
-    .single<{ content: string; ai_analyses: AnalysisRow | null }>();
+    .single<{
+      content: string;
+      question_content: string;
+      ai_analyses: AnalysisRow | null;
+    }>();
   if (error) throw error;
   if (journal.ai_analyses) return toAnalysis(journal.ai_analyses);
 
-  const analysis = analyzeJournal(journal.content);
+  const analysis = await analyzeJournal({
+    question: journal.question_content,
+    content: journal.content,
+  });
 
   // 동시에 두 번 호출돼도 한 번만 저장되도록 중복은 무시
   const { error: upsertError } = await supabase.from("ai_analyses").upsert(

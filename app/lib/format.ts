@@ -1,8 +1,16 @@
-/** 한국 날짜 기준 오늘 (YYYY-MM-DD). 서버가 UTC여도 자정에 날짜가 바뀜 */
+/** 한국 날짜 (YYYY-MM-DD). 서버가 UTC여도 한국 자정 기준으로 날짜가 바뀜 */
+function dateKST(date: Date) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" }).format(date);
+}
+
+/** 한국 날짜 기준 오늘 (YYYY-MM-DD) */
 export function todayKST() {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" }).format(
-    new Date(),
-  );
+  return dateKST(new Date());
+}
+
+/** 한국 날짜 기준으로 오늘 작성된 것인지 */
+export function isTodayKST(iso: string) {
+  return dateKST(new Date(iso)) === todayKST();
 }
 
 /** 서버(UTC)에서 렌더링해도 한국 날짜로 표시되도록 시간대를 고정 */
