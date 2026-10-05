@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 import { WindowFrame } from '@/app/components/WindowFrame';
 
 /** 글자·카드 자리를 대신하는 은은하게 반짝이는 막대 */
@@ -29,16 +29,18 @@ export function SkeletonCard({ children }: { children?: ReactNode }) {
  */
 export function WindowSkeleton({
   title,
+  size,
   closeHref,
   children,
 }: {
   title: string;
+  size: ComponentProps<typeof WindowFrame>['size'];
   closeHref?: string;
   children: ReactNode;
 }) {
   return (
-    <div className="p-7 flex flex-col min-h-screen">
-      <WindowFrame title={title} closeHref={closeHref}>
+    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+      <WindowFrame title={title} size={size} closeHref={closeHref}>
         <div role="status" aria-label="불러오는 중" className="flex flex-col grow">
           {children}
         </div>

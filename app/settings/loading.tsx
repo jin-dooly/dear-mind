@@ -2,7 +2,7 @@ import { SkeletonBlock, SkeletonHeading, WindowSkeleton } from '@/app/components
 
 export default function SettingsLoading() {
   return (
-    <WindowSkeleton title="MY-INFO.EXE" closeHref="/home">
+    <WindowSkeleton title="MY-INFO.EXE" size="md" closeHref="/home">
       <SkeletonHeading />
       <SkeletonBlock className="h-3 w-12 mb-2" />
       <div className="flex gap-2 mb-4">

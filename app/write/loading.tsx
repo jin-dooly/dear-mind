@@ -11,8 +11,8 @@ const MESSAGES = [
 
 export default function QuestionsLoading() {
   return (
-    <div className="p-7 flex flex-col min-h-screen">
-      <WindowFrame title="QUESTIONS.EXE" closeHref="/home">
+    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+      <WindowFrame title="QUESTIONS.EXE" size="md" closeHref="/home">
         <div className="flex flex-col grow items-center justify-center gap-6 py-10">
           <RotatingMessage messages={MESSAGES} className="font-jua text-[15px] text-ink leading-relaxed" />
           <RetroProgressBar />

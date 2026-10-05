@@ -12,8 +12,8 @@ export default async function RecordDetailPage({ params }: { params: Promise<{ i
   if (!journal) notFound();
 
   return (
-    <div className="p-7 flex flex-col min-h-screen">
-      <WindowFrame title={`${formatDate(journal.createdAt)}.TXT`} closeHref="/records">
+    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+      <WindowFrame title={`${formatDate(journal.createdAt)}.TXT`} size="lg" closeHref="/records">
         <span className="text-[11px] text-muted mb-1">
           {levelLabel(journal.level)} · {isTodayKST(journal.createdAt) ? '오늘의 질문' : '그날의 질문'}
         </span>

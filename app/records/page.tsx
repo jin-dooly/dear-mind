@@ -11,8 +11,8 @@ export default async function RecordsPage() {
 
   // 화면 높이로 고정해서 기록이 많아지면 창 안쪽 목록만 스크롤됨
   return (
-    <div className="p-7 flex flex-col h-dvh">
-      <WindowFrame title="RECORDS.EXE" closeHref="/home">
+    <div className="p-7 flex flex-col h-dvh items-center justify-center">
+      <WindowFrame title="RECORDS.EXE" size="lg" closeHref="/home">
         <FadeScrollArea>
           <p className="text-[13px] text-muted mb-1">
             지난 기록들을 다시 읽어 보세요

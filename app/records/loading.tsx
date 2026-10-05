@@ -2,7 +2,7 @@ import { SkeletonCard, SkeletonHeading, WindowSkeleton } from '@/app/components/
 
 export default function RecordsLoading() {
   return (
-    <WindowSkeleton title="RECORDS.EXE" closeHref="/home">
+    <WindowSkeleton title="RECORDS.EXE" size="lg" closeHref="/home">
       <SkeletonHeading />
       <div className="flex flex-col gap-3">
         <SkeletonCard />

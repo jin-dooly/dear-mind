@@ -58,8 +58,8 @@ export function Editor({ question }: { question: Question }) {
   }
 
   return (
-    <div className="p-7 flex flex-col min-h-screen">
-      <WindowFrame title="EDITOR.EXE" closeHref="/write">
+    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+      <WindowFrame title="EDITOR.EXE" size="lg" closeHref="/write">
         <p className="text-[13px] text-ink leading-relaxed mb-4">{question.content}</p>
 
         <textarea
