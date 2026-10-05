@@ -33,17 +33,6 @@ export function FolderMenuItem({
   const c = schemes[colorScheme];
   return (
     <div className="relative w-full h-[88px]">
-      {/* <svg
-        viewBox="0 0 300 100"
-        preserveAspectRatio="none"
-        className="absolute inset-0 w-full h-full"
-      >
-        <path
-          d="M14,8 H90 Q100,8 106,20 H278 Q292,20 292,34 V84 Q292,96 278,96 H14 Q2,96 2,84 V20 Q2,8 14,8 Z"
-          fill={c.back}
-        />
-        <rect x={8} y={30} width={284} height={62} rx={14} fill={c.front} />
-      </svg> */}
       {/* 좁은 화면에서도 넘치지 않도록 가로로만 늘고 줄어듦 (높이 고정 → 위에 얹은 글자 위치 유지) */}
       <svg
         height="95"
