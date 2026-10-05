@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { AnalysisWaiting } from '@/app/components/AnalysisWaiting';
-import { CompanionBlob } from '@/app/components/CompanionBlob';
+import { DitheredCat } from '@/app/components/DitheredCat';
 import { analyzeAndSaveJournal } from '@/app/lib/actions';
 import type { AIAnalysis } from '@/app/lib/types';
 
@@ -38,9 +38,25 @@ export function AnalysisResult({
     setAttempt((n) => n + 1);
   }
 
+  return <AnalysisView analysis={analysis} failed={failed} onRetry={retry} />;
+}
+
+/**
+ * 분석 화면의 보이는 부분. 기다리는 동안엔 큰 고양이 + 안내 문구,
+ * 결과가 나오면 같은 고양이가 작아지고 결과가 아래에서 살며시 떠오름
+ */
+function AnalysisView({
+  analysis,
+  failed,
+  onRetry,
+}: {
+  analysis: AIAnalysis | null;
+  failed: boolean;
+  onRetry: () => void;
+}) {
   return (
     <>
-      <CompanionBlob animated={!analysis && !failed} />
+      <DitheredCat compact={Boolean(analysis)} />
 
       {!analysis ? (
         failed ? (
@@ -48,36 +64,40 @@ export function AnalysisResult({
             <p className="text-[13px] text-ink leading-relaxed">
               분석을 불러오지 못했어요. 글은 저장되어 있어요
             </p>
-            <button onClick={retry} className="mt-2 text-[12px] text-muted underline">
+            <button onClick={onRetry} className="mt-2 text-[12px] text-muted underline">
               다시 분석하기
             </button>
           </div>
         ) : (
           <AnalysisWaiting />
         )
-      ) : analysis.isSafetyFallback ? (
-        <p className="text-[13px] text-ink leading-relaxed mt-5 whitespace-pre-line text-center">
-          {analysis.message}
-        </p>
       ) : (
-        <>
-          <p className="text-[13px] text-ink leading-relaxed mt-5">{analysis.summary}</p>
+        <div className="animate-fade-up motion-reduce:animate-none">
+          {analysis.isSafetyFallback ? (
+            <p className="text-[13px] text-ink leading-relaxed mt-5 whitespace-pre-line text-center">
+              {analysis.message}
+            </p>
+          ) : (
+            <>
+              <p className="text-[13px] text-ink leading-relaxed mt-5">{analysis.summary}</p>
 
-          <div className="flex flex-wrap gap-1.5 mt-4">
-            {analysis.toneKeywords.map((kw) => (
-              <span
-                key={kw}
-                className="rounded-full border border-line bg-folder-purple-front/40 px-2.5 py-1 text-[11px] font-jua text-folder-purple-text"
-              >
-                #{kw}
-              </span>
-            ))}
-          </div>
+              <div className="flex flex-wrap gap-1.5 mt-4">
+                {analysis.toneKeywords.map((kw) => (
+                  <span
+                    key={kw}
+                    className="rounded-full border border-line bg-folder-purple-front/40 px-2.5 py-1 text-[11px] font-jua text-folder-purple-text"
+                  >
+                    #{kw}
+                  </span>
+                ))}
+              </div>
 
-          <p className="text-[12px] text-ink leading-relaxed mt-4 rounded-xl bg-sky-light/60 p-3.5">
-            {analysis.message}
-          </p>
-        </>
+              <p className="text-[12px] text-ink leading-relaxed mt-4 rounded-xl bg-sky-light/60 p-3.5">
+                {analysis.message}
+              </p>
+            </>
+          )}
+        </div>
       )}
     </>
   );
