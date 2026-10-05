@@ -38,7 +38,9 @@ export function AnalysisResult({
     setAttempt((n) => n + 1);
   }
 
-  return <AnalysisView analysis={analysis} failed={failed} onRetry={retry} />;
+  return (
+    <AnalysisView seed={journalId} analysis={analysis} failed={failed} onRetry={retry} />
+  );
 }
 
 /**
@@ -46,17 +48,20 @@ export function AnalysisResult({
  * 결과가 나오면 같은 고양이가 작아지고 결과가 아래에서 살며시 떠오름
  */
 function AnalysisView({
+  seed,
   analysis,
   failed,
   onRetry,
 }: {
+  /** 고양이 색을 정하는 글 id */
+  seed: string;
   analysis: AIAnalysis | null;
   failed: boolean;
   onRetry: () => void;
 }) {
   return (
     <>
-      <DitheredCat compact={Boolean(analysis)} />
+      <DitheredCat seed={seed} compact={Boolean(analysis)} />
 
       {!analysis ? (
         failed ? (

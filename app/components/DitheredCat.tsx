@@ -102,12 +102,33 @@ interface Ripple {
 const hsl = ([h, s, l]: Hsl, a = 1) =>
   `hsl(${h.toFixed(1)} ${s}% ${l}% / ${a})`;
 
+/** 문자열을 32비트 정수로 (FNV-1a) */
+function hashString(text: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+/** 같은 시드면 항상 같은 수열을 내는 0~1 난수 생성기 (mulberry32) */
+function seededRandom(seed: number): () => number {
+  let a = seed;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 /** 위(진한 파스텔) → 아래(옅은 파스텔) 두 색. 색상환에서 35~80도 떨어진 이웃 색을 고름 */
-function randomPalette(): { top: Hsl; bottom: Hsl } {
+function randomPalette(random: () => number): { top: Hsl; bottom: Hsl } {
   // 파스텔로 만들면 탁해 보이는 노랑-연두(60~140도)는 시작 색에서 뺌
-  let h1 = Math.random() * 280;
+  let h1 = random() * 280;
   if (h1 >= 60) h1 += 80;
-  const shift = (35 + Math.random() * 45) * (Math.random() < 0.5 ? -1 : 1);
+  const shift = (35 + random() * 45) * (random() < 0.5 ? -1 : 1);
   return { top: [h1, 72, 74], bottom: [(h1 + shift + 360) % 360, 68, 81] };
 }
 
@@ -311,40 +332,16 @@ function buildParticles(
   };
 }
 
-/**
- * 방금 화면에 있던 고양이의 색. 로딩 화면 → 분석 화면처럼 고양이가 다시 마운트돼도 잠깐 사이면 같은 색을 이어 씀.
- * releasedAt이 null이면 아직 화면에 있는 중
- */
-let recentPalette: {
-  palette: { top: Hsl; bottom: Hsl };
-  releasedAt: number | null;
-} | null = null;
-const PALETTE_KEEP_MS = 3000;
-
-function takePalette() {
-  const now = performance.now();
-  const reusable =
-    recentPalette &&
-    (recentPalette.releasedAt === null ||
-      now - recentPalette.releasedAt < PALETTE_KEEP_MS);
-  const palette = reusable && recentPalette ? recentPalette.palette : randomPalette();
-  const entry = { palette, releasedAt: null as number | null };
-  recentPalette = entry;
-  return {
-    palette,
-    release: () => {
-      if (recentPalette === entry) entry.releasedAt = performance.now();
-    },
-  };
-}
-
 /** 작은 크기(compact)일 때의 배율. 분석 결과가 나오면 이 크기로 줄어듦 */
 const COMPACT_SCALE = 0.64;
 
 export function DitheredCat({
+  seed,
   compact = false,
   className,
 }: {
+  /** 색을 정하는 시드 (글 id). 같은 시드면 언제 그려도 같은 색, 없으면 매번 무작위 */
+  seed?: string;
   /** true면 작게 줄어든 상태 (분석 결과 화면). 바뀔 때 부드럽게 줄어들고, 작아지는 순간 한 번 웃어 줌 */
   compact?: boolean;
   className?: string;
@@ -364,10 +361,9 @@ export function DitheredCat({
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const {
-      palette: { top, bottom },
-      release: releasePalette,
-    } = takePalette();
+    const { top, bottom } = randomPalette(
+      seed ? seededRandom(hashString(seed)) : Math.random,
+    );
     const sprites = paletteSteps(top, bottom).map(makeDotSprite);
     wrap.style.setProperty("--cat-glow", hsl([top[0], 80, 84]));
     const points = ditherPoints(field);
@@ -678,7 +674,6 @@ export function DitheredCat({
 
     return () => {
       cancelAnimationFrame(raf);
-      releasePalette();
       cheerRef.current = null;
       resizeObserver.disconnect();
       canvas.removeEventListener("pointerenter", onPointerDown);
@@ -688,7 +683,7 @@ export function DitheredCat({
       canvas.removeEventListener("pointercancel", onPointerCancel);
       canvas.removeEventListener("pointerup", onPointerUp);
     };
-  }, []);
+  }, [seed]);
 
   useEffect(() => {
     if (compact && !prevCompactRef.current) cheerRef.current?.();
@@ -696,10 +691,11 @@ export function DitheredCat({
   }, [compact]);
 
   // 바깥 상자는 높이만 줄여 아래 내용이 따라 올라오게 하고, 안쪽은 위 기준으로 배율만 줄여 캔버스를 다시 그리지 않음
+  // shrink-0: 창 안에 스크롤이 생겨도 flex에 눌려 높이가 줄면 아래 내용과 겹치므로 크기를 고정
   return (
     <div
       aria-hidden
-      className={`relative mx-auto w-56 transition-[height] duration-700 ease-out motion-reduce:transition-none ${
+      className={`relative mx-auto w-56 shrink-0 transition-[height] duration-700 ease-out motion-reduce:transition-none ${
         compact ? "h-36" : "h-56"
       } ${className ?? ""}`}
     >
