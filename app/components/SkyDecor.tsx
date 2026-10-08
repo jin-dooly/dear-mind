@@ -7,12 +7,42 @@ import { Cloud, Sparkle } from "lucide-react";
  * - desktop: 640px 이상(sm:). 창 바깥 넓은 여백에 흩어 둠
  */
 const DECOR = [
-  { Icon: Cloud, color: "text-white/70", mobile: "top-2 left-[6%] size-10", desktop: "sm:top-[6%] sm:left-[8%] sm:size-[54px]" },
-  { Icon: Cloud, color: "text-white/60", mobile: "top-4 right-[20%] size-7", desktop: "sm:top-[16%] sm:right-[10%] sm:size-[38px]" },
-  { Icon: Cloud, color: "text-white/50", mobile: "bottom-2 right-[8%] size-9", desktop: "sm:bottom-[10%] sm:left-[14%] sm:right-auto sm:size-[44px]" },
-  { Icon: Sparkle, color: "text-white/80", mobile: "top-3 left-[40%] size-3.5", desktop: "sm:top-[30%] sm:left-auto sm:right-[16%] sm:size-[18px]" },
-  { Icon: Sparkle, color: "text-white/70", mobile: "bottom-5 left-[46%] size-3", desktop: "sm:bottom-[22%] sm:left-auto sm:right-[24%] sm:size-[14px]" },
-  { Icon: Sparkle, color: "text-white/70", mobile: "bottom-3 left-[14%] size-3.5", desktop: "sm:bottom-auto sm:top-[45%] sm:left-[9%] sm:size-4" },
+  {
+    Icon: Cloud,
+    color: "text-white/70",
+    mobile: "top-2 left-[6%] size-10",
+    desktop: "sm:top-[6%] sm:left-[8%] sm:size-[54px]",
+  },
+  {
+    Icon: Cloud,
+    color: "text-white/60",
+    mobile: "top-[5%] right-[20%] size-7",
+    desktop: "sm:top-[16%] sm:right-[10%] sm:size-[38px]",
+  },
+  {
+    Icon: Cloud,
+    color: "text-white/50",
+    mobile: "bottom-2 right-[8%] size-9",
+    desktop: "sm:bottom-[10%] sm:left-[14%] sm:right-auto sm:size-[44px]",
+  },
+  {
+    Icon: Sparkle,
+    color: "text-white/80",
+    mobile: "top-[8%] left-[40%] size-3.5",
+    desktop: "sm:top-[30%] sm:left-auto sm:right-[16%] sm:size-[18px]",
+  },
+  {
+    Icon: Sparkle,
+    color: "text-white/70",
+    mobile: "bottom-[6%] left-[60%] size-2.5",
+    desktop: "sm:bottom-[22%] sm:left-auto sm:right-[24%] sm:size-[14px]",
+  },
+  {
+    Icon: Sparkle,
+    color: "text-white/70",
+    mobile: "bottom-[3%] left-[18%] size-3.5",
+    desktop: "sm:bottom-auto sm:top-[45%] sm:left-[9%] sm:size-4",
+  },
 ];
 
 export function SkyDecor() {
