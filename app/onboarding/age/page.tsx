@@ -31,7 +31,7 @@ export default function OnboardingAgePage() {
   }
 
   return (
-    <div className="relative p-7 flex flex-col min-h-screen items-center justify-center">
+    <div className="relative p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title="SETUP.EXE (1/2)" size="md">
         <p className="text-[13px] text-muted mb-1">나이대에 맞는 질문을 준비할게요</p>
         <h1 className="font-jua text-lg text-ink mb-6">나이대를 알려 주세요</h1>

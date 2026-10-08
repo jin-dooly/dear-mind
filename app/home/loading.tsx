@@ -4,7 +4,7 @@ import { SkeletonBlock } from '@/app/components/Skeleton';
 // 홈은 가운데 정렬된 좁은 창이라 WindowSkeleton 대신 실제 홈과 같은 틀을 씀
 export default function HomeLoading() {
   return (
-    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+    <div className="p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title="HOME.EXE" size="sm" className="h-fit grow-0">
         <div role="status" aria-label="불러오는 중" className="p-2 pb-4">
           <SkeletonBlock className="h-6 w-44 mb-2" />

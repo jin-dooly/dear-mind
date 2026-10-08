@@ -10,7 +10,7 @@ export default async function HomePage() {
     nickname === DEFAULT_PROFILE.nickname ? "안녕하세요" : `${nickname}님, 안녕하세요`;
 
   return (
-    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+    <div className="p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title="HOME.EXE" size="sm" className="h-fit grow-0">
         <div className="p-2 pb-4">
           <h1 className="font-jua text-xl text-ink mb-1">{greeting}</h1>

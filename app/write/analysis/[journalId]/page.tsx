@@ -12,7 +12,7 @@ export default async function AnalysisPage({ params }: { params: Promise<{ journ
   if (!journal) notFound();
 
   return (
-    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+    <div className="p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title="ANALYSIS.EXE" size="md" closeHref="/home">
         <AnalysisResult journalId={journal.id} initialAnalysis={journal.analysis} />
 

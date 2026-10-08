@@ -2,9 +2,12 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { Minus, Square, X } from "lucide-react";
 
+// 모바일에서는 누르기 쉽게 크게, 넓은 화면에서는 작게.
+// 테두리를 소수 픽셀로 두면 기기 배율에 따라 반올림이 한쪽으로 쏠려 아이콘이 치우쳐 보여서 정수 픽셀로 둠
 const CONTROL_CLASS =
-  "w-3.5 h-3.5 border-[1.5px] border-line rounded-sm flex items-center justify-center text-[#8B96C7]";
-const ICON_PROPS = { size: 9, strokeWidth: 3 } as const;
+  "size-5 sm:size-4 shrink-0 border-2 border-line rounded flex items-center justify-center text-[#8B96C7]";
+const ICON_CLASS = "block size-2.5 sm:size-2";
+const ICON_PROPS = { strokeWidth: 3, className: ICON_CLASS } as const;
 
 /**
  * 창 크기 규칙. 화면이 넓어져도 창은 정해진 폭까지만 늘어나고 가운데 정렬됨
@@ -44,13 +47,13 @@ export function WindowFrame({
     >
       <div className="bg-linear-to-b from-[#D7E4FB] to-[#C3D3F5] border-b-2 border-line px-3.5 py-2.5 flex items-center justify-between">
         <span className="font-jua text-[13px] text-ink">{title}</span>
-        <div className="flex gap-1.5">
+        <div className="flex items-center gap-1.5">
           {/* 최소화·최대화는 장식. 닫기만 closeHref가 있을 때 동작 */}
           <span aria-hidden className={`${CONTROL_CLASS} bg-[#EDEBFB]`}>
             <Minus {...ICON_PROPS} />
           </span>
           <span aria-hidden className={`${CONTROL_CLASS} bg-[#EDEBFB]`}>
-            <Square {...ICON_PROPS} size={7} />
+            <Square {...ICON_PROPS} className="block size-2 sm:size-1.5" />
           </span>
           {closeHref ? (
             <Link

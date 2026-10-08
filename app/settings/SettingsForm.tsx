@@ -37,7 +37,7 @@ export function SettingsForm({ profile }: { profile: UserProfile }) {
   }
 
   return (
-    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+    <div className="p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title="MY-INFO.EXE" size="md" closeHref="/home">
         <p className="text-[13px] text-muted mb-1">나이대와 기본 레벨을 다시 설정해요</p>
         <h1 className="font-jua text-lg text-ink mb-5">내 정보 변경</h1>

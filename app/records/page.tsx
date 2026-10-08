@@ -13,13 +13,13 @@ export default async function RecordsPage() {
   return (
     <div className="p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title="RECORDS.EXE" size="lg" closeHref="/home">
-        <FadeScrollArea>
+        <FadeScrollArea className="-mx-1 px-1">
           <p className="text-[13px] text-muted mb-1">
             지난 기록들을 다시 읽어 보세요
           </p>
           <h1 className="font-jua text-lg text-ink mb-6">기록 보기</h1>
 
-          <div className="flex flex-col gap-3 grow min-h-0 -mx-1 px-1 py-0.5">
+          <div className="flex flex-col gap-3 grow min-h-0 py-0.5">
             {journals.length === 0 && (
               <div className="flex flex-col items-center text-center mt-10 gap-1.5">
                 <p className="font-jua text-[15px] text-ink">

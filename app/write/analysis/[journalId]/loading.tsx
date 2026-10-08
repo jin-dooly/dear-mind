@@ -6,7 +6,7 @@ import { LoadingCat } from './LoadingCat';
 // (고양이 색은 글 id로 정해져서 분석 화면과 같음)
 export default function AnalysisLoading() {
   return (
-    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+    <div className="p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title="ANALYSIS.EXE" size="md" closeHref="/home">
         <LoadingCat />
         <AnalysisWaiting />

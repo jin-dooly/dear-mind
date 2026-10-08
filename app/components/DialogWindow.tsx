@@ -17,7 +17,7 @@ export function DialogWindow({
   children: ReactNode;
 }) {
   return (
-    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+    <div className="p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title={title} size="sm" className="h-fit grow-0">
         <div className="flex flex-col items-center text-center px-2 py-6">
           <div className="text-[#9FB4EA] mb-4" aria-hidden>

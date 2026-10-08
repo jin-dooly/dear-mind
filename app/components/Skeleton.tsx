@@ -39,7 +39,7 @@ export function WindowSkeleton({
   children: ReactNode;
 }) {
   return (
-    <div className="p-7 flex flex-col min-h-screen items-center justify-center">
+    <div className="p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title={title} size={size} closeHref={closeHref}>
         <div role="status" aria-label="불러오는 중" className="flex flex-col grow">
           {children}

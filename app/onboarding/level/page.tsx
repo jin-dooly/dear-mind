@@ -31,7 +31,7 @@ export default function OnboardingLevelPage() {
   }
 
   return (
-    <div className="relative p-7 flex flex-col min-h-screen items-center justify-center">
+    <div className="relative p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title="SETUP.EXE (2/2)" size="md" closeHref="/onboarding/age">
         <p className="text-[13px] text-muted mb-1">
           이제 기본 레벨을 골라 주세요

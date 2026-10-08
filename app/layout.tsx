@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko" className={jua.variable}>
-      <body className="bg-linear-to-b from-sky-light to-sky-dark min-h-screen text-ink">
+      <body className="bg-linear-to-b from-sky-light to-sky-dark h-dvh overflow-hidden text-ink">
         <SkyDecor />
         {children}
       </body>

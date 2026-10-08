@@ -10,7 +10,7 @@ export default async function MainPage({
   const { error } = await searchParams;
 
   return (
-    <div className="relative p-7 flex flex-col min-h-screen items-center justify-center">
+    <div className="relative p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title="DEAR-MIND.EXE" size="md" maxHeight="max-h-140">
         <div className="relative flex flex-col grow items-center justify-center text-center px-6 py-10">
           <MoonIcon
