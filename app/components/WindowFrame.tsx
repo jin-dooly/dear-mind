@@ -3,9 +3,10 @@ import Link from "next/link";
 import { Minus, Square, X } from "lucide-react";
 
 // 모바일에서는 누르기 쉽게 크게, 넓은 화면에서는 작게.
-// 테두리를 소수 픽셀로 두면 기기 배율에 따라 반올림이 한쪽으로 쏠려 아이콘이 치우쳐 보여서 정수 픽셀로 둠
+// 얇은 테두리(1.5px)를 border로 주면 기기 배율에 따라 반올림이 한쪽으로 쏠려 아이콘이 치우쳐 보임.
+// 안쪽 ring(box-shadow)은 상자 크기에 영향을 주지 않아서 아이콘이 가운데에 그대로 있음
 const CONTROL_CLASS =
-  "size-5 sm:size-4 shrink-0 border-2 border-line rounded flex items-center justify-center text-[#8B96C7]";
+  "size-5 sm:size-4 shrink-0 ring-[1.5px] ring-inset ring-line rounded flex items-center justify-center text-[#8B96C7]";
 const ICON_CLASS = "block size-2.5 sm:size-2";
 const ICON_PROPS = { strokeWidth: 3, className: ICON_CLASS } as const;
 

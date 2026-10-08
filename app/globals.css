@@ -95,12 +95,16 @@
   }
 }
 
-/* 창 안쪽 스크롤 영역: 세로로만 스크롤되고 스크롤바는 숨김 */
-.window-scroll {
-  overflow-x: hidden;
+/* 스크롤바는 어디서든 숨김 (스크롤 자체는 됨) */
+* {
   scrollbar-width: none;
 }
-.window-scroll::-webkit-scrollbar {
+*::-webkit-scrollbar {
   display: none;
+}
+
+/* 창 안쪽 스크롤 영역: 세로로만 스크롤됨 */
+.window-scroll {
+  overflow-x: hidden;
 }
 
