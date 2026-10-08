@@ -2,6 +2,7 @@ import { Pencil, BookOpen, Settings } from "lucide-react";
 import { WindowFrame } from "@/app/components/WindowFrame";
 import { FolderMenuItem } from "@/app/components/FolderMenuItem";
 import { DEFAULT_PROFILE, getProfile } from "@/app/lib/db";
+import { HomeCat } from "./HomeCat";
 
 export default async function HomePage() {
   const { nickname } = await getProfile();
@@ -13,10 +14,15 @@ export default async function HomePage() {
     <div className="p-7 flex flex-col h-dvh items-center justify-center">
       <WindowFrame title="HOME.EXE" size="sm" className="h-fit grow-0">
         <div className="p-2 pb-4">
-          <h1 className="font-jua text-xl text-ink mb-1">{greeting}</h1>
-          <p className="text-[13px] text-muted mb-5">
-            마음 한 조각을 들여다볼까요?
-          </p>
+          <div className="flex items-center justify-between gap-2 mb-5">
+            <div>
+              <h1 className="font-jua text-xl text-ink mb-1">{greeting}</h1>
+              <p className="text-[13px] text-muted">
+                마음 한 조각을 들여다볼까요?
+              </p>
+            </div>
+            <HomeCat />
+          </div>
 
           <div className="flex flex-col gap-5 justify-center">
             <FolderMenuItem

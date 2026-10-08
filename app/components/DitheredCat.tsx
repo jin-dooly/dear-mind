@@ -50,7 +50,7 @@ const HAPPY_EYE_ARCH = 0.3;
 /** 눈이 커서를 따라 움직이는 최대 거리 (격자 단위, 클수록 많이 움직임) */
 const LOOK_MAX = 7;
 /** 커서가 얼굴에서 이 거리(px)만큼 떨어지면 눈이 최대로 움직임 (작을수록 조금만 움직여도 끝까지 감) */
-const LOOK_REACH = 60;
+const LOOK_REACH = 100;
 /** 숨쉬기·눌림 변형의 기준점 (몸 아래 가운데) */
 const ANCHOR = [75, 123] as const;
 
@@ -64,12 +64,12 @@ const DOT_CORE = 0.25;
 const DITHER_THRESHOLD = 128;
 
 const CURSOR_RADIUS = 200;
-const CURSOR_FORCE = 8;
+const CURSOR_FORCE = 20;
 /** 쓰다듬는 방향으로 털이 쓸리는 정도 */
-const STROKE_DRAG = 1.4;
-const MAX_STROKE_SPEED = 8;
+const STROKE_DRAG = 3.4;
+const MAX_STROKE_SPEED = 30;
 const RIPPLE_SPEED = 150;
-const RIPPLE_WIDTH = 30;
+const RIPPLE_WIDTH = 50;
 const RIPPLE_FORCE = 10;
 const RIPPLE_DURATION = 700;
 const LERP = 0.14;
@@ -334,16 +334,24 @@ function buildParticles(
 
 /** 작은 크기(compact)일 때의 배율. 분석 결과가 나오면 이 크기로 줄어듦 */
 const COMPACT_SCALE = 0.64;
+/** 미니 고양이(홈 인사말 옆) 배율. 원래 상자(224px)를 44px(size-11)로 줄임 */
+const MINI_SCALE = 22 / 224;
 
 export function DitheredCat({
   seed,
   compact = false,
+  mini = false,
+  fill = false,
   className,
 }: {
   /** 색을 정하는 시드 (글 id). 같은 시드면 언제 그려도 같은 색, 없으면 매번 무작위 */
   seed?: string;
   /** true면 작게 줄어든 상태 (분석 결과 화면). 바뀔 때 부드럽게 줄어들고, 작아지는 순간 한 번 웃어 줌 */
   compact?: boolean;
+  /** true면 아주 작게 보여주기만 함 (만질 수 없음, 숨쉬기·깜빡임만) */
+  mini?: boolean;
+  /** true면 정해진 크기 대신 부모가 준 크기(className)를 꽉 채움. 그 안 어디서든 만지면 반응하고 고양이도 그쪽을 쳐다봄 */
+  fill?: boolean;
   className?: string;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -369,6 +377,8 @@ export function DitheredCat({
     const points = ditherPoints(field);
 
     let sys: Particles | null = null;
+    /** 미니 고양이는 점이 움직이지 않으므로 한 번 그려 둔 그림을 매 프레임 찍기만 함 */
+    let dotCache: HTMLCanvasElement | null = null;
     let layout = { sf: 1, ox: 0, oy: 0, dpr: 1 };
     const pointer = { x: 0, y: 0, vx: 0, vy: 0, active: false };
     const ripples: Ripple[] = [];
@@ -403,6 +413,14 @@ export function DitheredCat({
       const oy = (rect.height - GRID_H * sf) / 2;
       layout = { sf, ox, oy, dpr };
       sys = buildParticles(points, sprites, sf, ox, oy);
+      if (mini) {
+        dotCache = document.createElement("canvas");
+        dotCache.width = canvas.width;
+        dotCache.height = canvas.height;
+        const cacheCtx = dotCache.getContext("2d");
+        cacheCtx?.setTransform(dpr, 0, 0, dpr, 0, 0);
+        if (cacheCtx) drawDots(cacheCtx, sys);
+      }
       start();
     }
 
@@ -562,15 +580,24 @@ export function DitheredCat({
         dpr * ay * (1 - sy),
       );
 
-      const { baseX, baseY, offX, offY, size, groups } = sys;
+      if (dotCache) {
+        ctx.drawImage(dotCache, 0, 0, canvas.width / dpr, canvas.height / dpr);
+      } else {
+        drawDots(ctx, sys);
+      }
+      drawFace(now);
+    }
+
+    function drawDots(target: CanvasRenderingContext2D, particles: Particles) {
+      const { baseX, baseY, offX, offY, size, groups } = particles;
       // 흐릿한 점 그림(스프라이트)을 찍어서 점이 번져 보이게 함
       const r = (size / 2) * DOT_BLUR;
       const d = r * 2;
       for (const { sprite, alpha, ids } of groups) {
-        ctx.globalAlpha = alpha;
+        target.globalAlpha = alpha;
         for (let j = 0; j < ids.length; j++) {
           const i = ids[j];
-          ctx.drawImage(
+          target.drawImage(
             sprite,
             baseX[i] + offX[i] - r,
             baseY[i] + offY[i] - r,
@@ -579,13 +606,12 @@ export function DitheredCat({
           );
         }
       }
-      ctx.globalAlpha = 1;
-      drawFace(now);
+      target.globalAlpha = 1;
     }
 
     function frame(now: number) {
       raf = 0;
-      const moving = step(now);
+      const moving = mini ? false : step(now);
       draw(now);
       // 숨쉬기·깜빡임이 있으면 계속, 아니면 움직임이 끝날 때 멈춤
       if (!reduceMotion || moving) raf = requestAnimationFrame(frame);
@@ -665,6 +691,12 @@ export function DitheredCat({
 
     const resizeObserver = new ResizeObserver(relayout);
     resizeObserver.observe(canvas);
+    if (mini) {
+      return () => {
+        cancelAnimationFrame(raf);
+        resizeObserver.disconnect();
+      };
+    }
     canvas.addEventListener("pointerenter", onPointerDown);
     canvas.addEventListener("pointerdown", onPointerDown);
     canvas.addEventListener("pointermove", onPointerMove);
@@ -683,7 +715,7 @@ export function DitheredCat({
       canvas.removeEventListener("pointercancel", onPointerCancel);
       canvas.removeEventListener("pointerup", onPointerUp);
     };
-  }, [seed]);
+  }, [seed, mini]);
 
   useEffect(() => {
     if (compact && !prevCompactRef.current) cheerRef.current?.();
@@ -692,25 +724,37 @@ export function DitheredCat({
 
   // 바깥 상자는 높이만 줄여 아래 내용이 따라 올라오게 하고, 안쪽은 위 기준으로 배율만 줄여 캔버스를 다시 그리지 않음
   // shrink-0: 창 안에 스크롤이 생겨도 flex에 눌려 높이가 줄면 아래 내용과 겹치므로 크기를 고정
+  const boxClass = fill
+    ? "self-stretch"
+    : `mx-auto ${mini ? "size-6" : `w-56 ${compact ? "h-36" : "h-56"}`}`;
+  const scale = mini ? MINI_SCALE : compact ? COMPACT_SCALE : 1;
   return (
     <div
       aria-hidden
-      className={`relative mx-auto w-56 shrink-0 transition-[height] duration-700 ease-out motion-reduce:transition-none ${
-        compact ? "h-36" : "h-56"
-      } ${className ?? ""}`}
+      className={`relative shrink-0 transition-[height] duration-700 ease-out motion-reduce:transition-none ${boxClass} ${className ?? ""}`}
     >
       <div
         ref={wrapRef}
-        className="absolute inset-x-0 top-0 h-56 origin-top transition-transform duration-700 ease-out motion-reduce:transition-none"
-        style={{ transform: `scale(${compact ? COMPACT_SCALE : 1})` }}
+        className={`absolute [container-type:size] ${
+          fill
+            ? "inset-0"
+            : "left-1/2 top-0 -ml-28 size-56 origin-top transition-transform duration-700 ease-out motion-reduce:transition-none"
+        }`}
+        style={fill ? undefined : { transform: `scale(${scale})` }}
       >
-      {/* 뒤쪽 은은한 빛과 바닥 그림자 */}
-      <div className="absolute left-1/2 top-[50%] h-40 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--cat-glow) opacity-60 blur-2xl" />
-      <div className="absolute bottom-5 left-1/2 h-3 w-36 -translate-x-1/2 rounded-full bg-ink/15 blur-md" />
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 h-full w-full touch-none cursor-grab active:cursor-grabbing"
-      />
+        {/* 뒤쪽 은은한 빛과 바닥 그림자. 고양이가 그려지는 가운데 정사각형 기준 비율이라 크기가 바뀌어도 같이 커짐 */}
+        <div className="absolute left-1/2 top-1/2 size-[min(100cqw,100cqh)] -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute left-1/2 top-1/2 h-[71%] w-[79%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--cat-glow) opacity-50 blur-2xl" />
+          <div className="absolute bottom-[9%] left-1/2 h-[5.5%] w-[64%] -translate-x-1/2 rounded-full bg-ink/15 blur-md" />
+        </div>
+        <canvas
+          ref={canvasRef}
+          className={`absolute inset-0 h-full w-full ${
+            mini
+              ? "pointer-events-none"
+              : "touch-none cursor-grab active:cursor-grabbing"
+          }`}
+        />
       </div>
     </div>
   );

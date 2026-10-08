@@ -15,11 +15,13 @@ const ICON_PROPS = { strokeWidth: 3, className: ICON_CLASS } as const;
  * - sm 360px: 홈, 대화상자(에러·404)
  * - md 480px: 로그인, 온보딩, 설정, 질문, 분석
  * - lg 640px: 에디터, 기록 목록·상세 (글을 읽고 쓰는 화면, 한 줄 길이 기준)
+ * - full: 폭 제한 없음. 모달처럼 바깥에서 폭을 정할 때
  */
 const SIZE_CLASS = {
   sm: "max-w-90",
   md: "max-w-120",
   lg: "max-w-160",
+  full: "max-w-none",
 } as const;
 
 /** 높이도 화면에 맞춰 늘어나되 이 이상은 늘어나지 않음 (넘치는 내용은 창 안에서 스크롤) */
@@ -32,6 +34,7 @@ export function WindowFrame({
   maxHeight = DEFAULT_MAX_HEIGHT,
   className,
   closeHref,
+  onClose,
 }: {
   title: string;
   children: ReactNode;
@@ -41,6 +44,8 @@ export function WindowFrame({
   className?: string;
   /** 있으면 × 버튼이 이 경로로 이동하는 "닫기" 버튼이 됨 */
   closeHref?: string;
+  /** 있으면 × 버튼이 이 함수를 부르는 "닫기" 버튼이 됨 (모달처럼 페이지 이동 없이 닫을 때) */
+  onClose?: () => void;
 }) {
   return (
     <div
@@ -65,6 +70,16 @@ export function WindowFrame({
             >
               <X {...ICON_PROPS} />
             </Link>
+          ) : onClose ? (
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="닫기"
+              title="닫기"
+              className={`${CONTROL_CLASS} bg-[#F5C9D9] hover:bg-[#EFA9C2] hover:text-ink-dark`}
+            >
+              <X {...ICON_PROPS} />
+            </button>
           ) : (
             <span aria-hidden className={`${CONTROL_CLASS} bg-[#F5C9D9]`}>
               <X {...ICON_PROPS} />
