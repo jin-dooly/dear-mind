@@ -59,7 +59,7 @@ export function QuestionList({
             href={`/write/${q.id}`}
             aria-disabled={pending}
             tabIndex={pending ? -1 : undefined}
-            className={`w-full rounded-xl border-2 border-line bg-white px-4 py-3.5 text-left transition-[translate,opacity] active:translate-y-0.5 ${
+            className={`w-full rounded-xl border-2 border-line bg-surface px-4 py-3.5 text-left transition-[translate,opacity] active:translate-y-0.5 ${
               pending ? 'pointer-events-none opacity-30' : ''
             }`}
           >
@@ -95,7 +95,7 @@ export function QuestionList({
                 aria-label={`${i + 1}번째 질문 세트`}
                 aria-current={i === index}
                 className={`h-2 w-2 rounded-full border border-line ${
-                  i === index ? 'bg-line' : 'bg-white'
+                  i === index ? 'bg-line' : 'bg-surface'
                 }`}
               />
             ))}

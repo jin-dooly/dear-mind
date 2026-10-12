@@ -28,7 +28,7 @@ export default async function RecordDetailPage({
         </span>
         <p className="text-[13px] text-ink leading-relaxed mb-4">{journal.questionContent}</p>
 
-        <p className="text-[13px] text-ink leading-relaxed mb-5 rounded-xl bg-white border-2 border-line-soft p-3.5 whitespace-pre-line">
+        <p className="text-[13px] text-ink leading-relaxed mb-5 rounded-xl bg-surface border-2 border-line-soft p-3.5 whitespace-pre-line">
           {journal.content}
         </p>
 

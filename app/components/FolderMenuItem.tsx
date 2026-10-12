@@ -3,18 +3,35 @@ import Link from "next/link";
 
 type ColorScheme = "purple" | "pink" | "mint";
 
+/**
+ * 색 클래스 (globals.css의 --color-folder-* 토큰, 다크 모드에서 값이 바뀜).
+ * Tailwind가 찾을 수 있도록 클래스 이름을 문자열 그대로 적어 둠
+ */
 const schemes: Record<
   ColorScheme,
-  { back: string; front: string; text: string; sub: string }
+  { back: string; front: string; text: string; sub: string; icon: string }
 > = {
   purple: {
-    back: "#8466BA",
-    front: "#C9B8EA",
-    text: "#4A3B7A",
-    sub: "#57457C",
+    back: "fill-folder-purple-back",
+    front: "fill-folder-purple-front",
+    text: "text-folder-purple-text",
+    sub: "text-folder-purple-sub",
+    icon: "text-folder-purple-icon",
   },
-  pink: { back: "#D98FB0", front: "#F7C6DA", text: "#8A3F5E", sub: "#8B4465" },
-  mint: { back: "#5FAE85", front: "#B9E8D0", text: "#2E6B4A", sub: "#326B50" },
+  pink: {
+    back: "fill-folder-pink-back",
+    front: "fill-folder-pink-front",
+    text: "text-folder-pink-text",
+    sub: "text-folder-pink-sub",
+    icon: "text-folder-pink-icon",
+  },
+  mint: {
+    back: "fill-folder-mint-back",
+    front: "fill-folder-mint-front",
+    text: "text-folder-mint-text",
+    sub: "text-folder-mint-sub",
+    icon: "text-folder-mint-icon",
+  },
 };
 
 export function FolderMenuItem({
@@ -44,11 +61,11 @@ export function FolderMenuItem({
       >
         <path
           d="M13.3933 7.6001H86.1C92.4778 7.6001 97.58 11.4001 101.407 19.0001H265.953C274.882 19.0001 279.347 23.4334 279.347 32.3001V79.8001C279.347 87.4001 274.882 91.2001 265.953 91.2001H13.3933C5.74 91.2001 1.91333 87.4001 1.91333 79.8001V19.0001C1.91333 11.4001 5.74 7.6001 13.3933 7.6001Z"
-          fill={c.back}
+          className={c.back}
         />
         <path
           d="M271.693 26.6001H12.4367C7.68149 26.6001 3.82666 30.4281 3.82666 35.1501V84.5501C3.82666 89.2721 7.68149 93.1001 12.4367 93.1001H271.693C276.448 93.1001 280.303 89.2721 280.303 84.5501V35.1501C280.303 30.4281 276.448 26.6001 271.693 26.6001Z"
-          fill={c.front}
+          className={c.front}
         />
       </svg>
 
@@ -56,12 +73,12 @@ export function FolderMenuItem({
         href={href}
         className="absolute top-[34px] bottom-2 left-0 right-0 flex items-center gap-3.5 px-5 text-left"
       >
-        <span className="shrink-0 text-white">{icon}</span>
+        <span className={`shrink-0 ${c.icon}`}>{icon}</span>
         <span className="flex min-w-0 flex-col gap-0.5">
-          <span className="truncate font-jua text-[15px]" style={{ color: c.text }}>
+          <span className={`truncate font-jua text-[15px] ${c.text}`}>
             {title}
           </span>
-          <span className="truncate text-[11px]" style={{ color: c.sub }}>
+          <span className={`truncate text-[11px] ${c.sub}`}>
             {subtitle}
           </span>
         </span>

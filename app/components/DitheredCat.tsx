@@ -745,7 +745,7 @@ export function DitheredCat({
         {/* 뒤쪽 은은한 빛과 바닥 그림자. 고양이가 그려지는 가운데 정사각형 기준 비율이라 크기가 바뀌어도 같이 커짐 */}
         <div className="absolute left-1/2 top-1/2 size-[min(100cqw,100cqh)] -translate-x-1/2 -translate-y-1/2">
           <div className="absolute left-1/2 top-1/2 h-[71%] w-[79%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--cat-glow) opacity-50 blur-2xl" />
-          <div className="absolute bottom-[9%] left-1/2 h-[5.5%] w-[64%] -translate-x-1/2 rounded-full bg-ink/15 blur-md" />
+          <div className="absolute bottom-[9%] left-1/2 h-[5.5%] w-[64%] -translate-x-1/2 rounded-full bg-scrim/15 dark:bg-scrim/40 blur-md" />
         </div>
         <canvas
           ref={canvasRef}

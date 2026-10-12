@@ -8,7 +8,7 @@ export function RecordCard({ journal, query = '' }: { journal: Journal; query?: 
   return (
     <Link
       href={`/records/${journal.id}${query}`}
-      className="w-full rounded-xl border-2 border-line bg-white px-4 py-3.5 text-left"
+      className="w-full rounded-xl border-2 border-line bg-surface px-4 py-3.5 text-left"
     >
       <div className="flex items-center justify-between mb-1.5">
         <LevelBadge level={journal.level} />

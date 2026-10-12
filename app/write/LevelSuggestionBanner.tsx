@@ -51,7 +51,7 @@ export function LevelSuggestionBanner({ suggestion }: { suggestion: LevelSuggest
         <button
           onClick={() => respond(false)}
           disabled={pending}
-          className="rounded-full border-2 border-line-soft bg-white px-3 py-1 text-[12px] font-jua text-muted disabled:opacity-60"
+          className="rounded-full border-2 border-line-soft bg-surface px-3 py-1 text-[12px] font-jua text-muted disabled:opacity-60"
         >
           지금이 좋아요
         </button>

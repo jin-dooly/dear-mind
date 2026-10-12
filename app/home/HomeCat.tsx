@@ -43,7 +43,7 @@ export function HomeCat() {
         }}
         // 화면 폭을 꽉 채우되 바깥 여백은 모바일 20px(5), 넓은 화면 80px(20).
         // 열 때 대화상자 자체에 포커스가 가서 생기는 테두리는 숨김
-        className="m-auto outline-none w-[calc(100%-40px)] max-w-none max-h-none overflow-visible bg-transparent backdrop:bg-ink/25 sm:w-[calc(100%-160px)]"
+        className="m-auto outline-none w-[calc(100%-40px)] max-w-none max-h-none overflow-visible bg-transparent backdrop:bg-scrim/25 dark:backdrop:bg-scrim/50 sm:w-[calc(100%-160px)]"
       >
         {open && (
           <WindowFrame

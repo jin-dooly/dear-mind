@@ -1,48 +1,115 @@
 @import "tailwindcss";
 
+/*
+ * 다크 모드
+ * - 쿠키에 고른 테마가 있으면 서버가 <html data-theme="light|dark">를 붙임 (app/lib/theme.ts)
+ * - 없으면 속성 없이 기기 설정(prefers-color-scheme)을 따라감
+ * 색은 아래 토큰의 light-dark(라이트, 다크)가 color-scheme에 맞춰 고름.
+ * 색이 아닌 값(투명도 등)만 dark: 변형을 씀
+ */
+:root {
+  color-scheme: light dark;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+}
+
+/* 높이가 낮은 휴대폰 화면 (창 위 여백이 거의 없음) */
+@custom-variant short-mobile (@media (width < 40rem) and (height <= 600px));
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
 
   --font-jua: var(--font-jua), sans-serif;
 
-  --color-sky-light: #dce9fb;
-  --color-sky-dark: #ece3fb;
-  --color-ink: #4a5480;
-  --color-ink-dark: #2e2a45;
-  /* 보조 텍스트: 창 배경 위 대비 4.5:1 (WCAG AA) */
-  --color-muted: #6a6fac;
+  /* 화면 배경 그라데이션: 낮 하늘 -> 밤 하늘 */
+  --color-page-top: light-dark(#dce9fb, #1a1d3b);
+  --color-page-bottom: light-dark(#ece3fb, #2b2350);
 
-  /* primary 버튼 배경 (로그인 버튼 색) */
-  --color-primary: #a0b5ec;
+  /* 선택·강조 바탕 (선택된 칩, 안내 상자 등) */
+  --color-sky-light: light-dark(#dce9fb, #343a6e);
+  --color-ink: light-dark(#4a5480, #dde2fa);
+  --color-ink-dark: light-dark(#2e2a45, #f4f2ff);
+  /* 보조 텍스트: 창 배경 위 대비 4.5:1 (WCAG AA) */
+  --color-muted: light-dark(#6a6fac, #a9aedd);
+
+  /* primary 버튼 배경 (로그인 버튼 색)과 그 위 글씨. 다크에서는 ink-dark가 밝아져서 따로 둠 */
+  --color-primary: light-dark(#a0b5ec, #8fa6e8);
+  --color-on-primary: light-dark(#2e2a45, #1a1d3b);
 
   /* 테두리: 창 프레임 색(line)보다 진한 테두리는 쓰지 않음 */
-  --color-line: #8b96c7;
-  --color-line-soft: #c7cdeb;
+  --color-line: light-dark(#8b96c7, #5d66a3);
+  --color-line-soft: light-dark(#c7cdeb, #3c4275);
 
-  /* 흰 글씨 버튼 배경으로도 쓰여 대비 4.5:1 맞춤 */
-  --color-folder-purple-back: #8466ba;
-  --color-folder-purple-front: #c9b8ea;
-  --color-folder-purple-text: #4a3b7a;
-  --color-folder-purple-sub: #57457c;
+  /* 창 본문, 그 안의 카드·입력 칸 바탕 */
+  --color-window: light-dark(#fbfaff, #22254a);
+  --color-surface: light-dark(#ffffff, #2a2d55);
 
-  --color-folder-pink-back: #d98fb0;
-  --color-folder-pink-front: #f7c6da;
-  --color-folder-pink-text: #8a3f5e;
-  --color-folder-pink-sub: #8b4465;
+  /* 창 제목줄과 창 버튼(_ □ ×) */
+  --color-titlebar-from: light-dark(#d7e4fb, #343a6e);
+  --color-titlebar-to: light-dark(#c3d3f5, #2c3160);
+  --color-control: light-dark(#edebfb, #3a3f70);
+  --color-control-icon: light-dark(#8b96c7, #a9b1e6);
+  --color-control-close: light-dark(#f5c9d9, #9c5f7c);
+  --color-control-close-hover: light-dark(#efa9c2, #b5708f);
+  --color-control-close-icon: light-dark(#8b96c7, #ffe3ee);
 
-  --color-folder-mint-back: #5fae85;
-  --color-folder-mint-front: #b9e8d0;
-  --color-folder-mint-text: #2e6b4a;
-  --color-folder-mint-sub: #326b50;
+  /* 모달 바깥을 덮는 막, 그림자 */
+  --color-scrim: light-dark(#4a5480, #05060f);
+  /* 창 아래 깔리는 납작한 그림자 */
+  --shadow-window: 0 8px 0 light-dark(rgb(139 150 199 / 0.15), rgb(5 6 15 / 0.35));
 
-  /* 레벨(1~4) 그라데이션 — 가볍게(하늘색) -> 깊게(진보라) */
-  --color-level-1: #dceffb;
-  --color-level-2: #e3e3fb;
-  --color-level-3: #f0d9f5;
-  --color-level-4: #beaae8;
+  /* 폴더 메뉴: back(탭), front(본체), text·sub(글씨), icon */
+  --color-folder-purple-back: light-dark(#8466ba, #7a5fb3);
+  --color-folder-purple-front: light-dark(#c9b8ea, #41376b);
+  --color-folder-purple-text: light-dark(#4a3b7a, #ebe3ff);
+  --color-folder-purple-sub: light-dark(#57457c, #c6b8ee);
+  --color-folder-purple-icon: light-dark(#ffffff, #c9b8ea);
+
+  --color-folder-pink-back: light-dark(#d98fb0, #b5708f);
+  --color-folder-pink-front: light-dark(#f7c6da, #5a3247);
+  --color-folder-pink-text: light-dark(#8a3f5e, #ffe0ec);
+  --color-folder-pink-sub: light-dark(#8b4465, #ebb7cc);
+  --color-folder-pink-icon: light-dark(#ffffff, #f7c6da);
+
+  --color-folder-mint-back: light-dark(#5fae85, #4c8e6c);
+  --color-folder-mint-front: light-dark(#b9e8d0, #2c5141);
+  --color-folder-mint-text: light-dark(#2e6b4a, #d6f5e4);
+  --color-folder-mint-sub: light-dark(#326b50, #a7dcc1);
+  --color-folder-mint-icon: light-dark(#ffffff, #b9e8d0);
+
+  /* 레벨(1~4) 그라데이션 — 가볍게(하늘색) -> 깊게(진보라). 다크에서도 같은 순서 */
+  --color-level-1: light-dark(#dceffb, #2a3f5c);
+  --color-level-2: light-dark(#e3e3fb, #34365f);
+  --color-level-3: light-dark(#f0d9f5, #4a3557);
+  --color-level-4: light-dark(#beaae8, #5a4787);
+
+  /* 밤하늘 달, 테마 토글 */
+  --color-moon: #f3e6b8;
+  --color-sun: #eea94c;
+  --color-toggle-track: light-dark(#c3d3f5, #1a1d3b);
+  --color-toggle-knob: light-dark(#fbfaff, #3a3f70);
+  --shadow-toggle:
+    inset 0 2px 4px light-dark(rgb(74 84 128 / 0.25), rgb(0 0 0 / 0.45)),
+    0 3px 0 light-dark(rgb(139 150 199 / 0.25), rgb(8 10 30 / 0.35));
+  --shadow-toggle-knob: 0 2px 0 light-dark(rgb(139 150 199 / 0.35), rgb(8 10 30 / 0.4));
 
   /* 로딩 애니메이션 */
-  --color-skeleton: #e6e3f7;
+  --color-skeleton: light-dark(#e6e3f7, #2f3258);
   --animate-progress-slide: progress-slide 1.6s linear infinite;
   --animate-dot: dot 1.2s ease-in-out infinite;
   /* 고양이가 작아지는 동안(0.7s) 살짝 기다렸다가 결과가 떠오름 */

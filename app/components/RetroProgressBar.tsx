@@ -9,7 +9,7 @@ export function RetroProgressBar({ size = 'md' }: { size?: 'sm' | 'md' }) {
   return (
     <div
       aria-hidden
-      className={`w-full max-w-72 ${height} overflow-hidden rounded-md border-2 border-line bg-white p-0.5`}
+      className={`w-full max-w-72 ${height} overflow-hidden rounded-md border-2 border-line bg-surface p-0.5`}
     >
       <div className="flex h-full w-[200%] animate-progress-slide motion-reduce:animate-none">
         {blocks.map((_, i) => (

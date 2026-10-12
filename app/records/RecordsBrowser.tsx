@@ -90,7 +90,7 @@ const VIEW_OPTIONS = [
 /** 제목 오른쪽의 목록/캘린더 아이콘 전환 버튼 */
 function ViewToggle({ view, onChange }: { view: RecordsView; onChange: (view: RecordsView) => void }) {
   return (
-    <div className="flex gap-0.5 shrink-0 rounded-lg border-2 border-line-soft bg-white p-0.5">
+    <div className="flex gap-0.5 shrink-0 rounded-lg border-2 border-line-soft bg-surface p-0.5">
       {VIEW_OPTIONS.map(({ value, label, Icon }) => (
         <button
           key={value}

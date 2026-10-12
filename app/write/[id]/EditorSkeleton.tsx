@@ -5,7 +5,7 @@ export function EditorSkeleton() {
     <WindowSkeleton title="EDITOR.EXE" size="lg" closeHref="/write">
       <SkeletonBlock className="h-3.5 w-full mb-2" />
       <SkeletonBlock className="h-3.5 w-1/2 mb-4" />
-      <div className="w-full grow min-h-60 rounded-xl border-2 border-line-soft bg-white" />
+      <div className="w-full grow min-h-60 rounded-xl border-2 border-line-soft bg-surface" />
       <SkeletonBlock className="h-12 w-full mt-9 rounded-xl" />
     </WindowSkeleton>
   );

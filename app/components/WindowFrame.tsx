@@ -6,7 +6,7 @@ import { Minus, Square, X } from "lucide-react";
 // 얇은 테두리(1.5px)를 border로 주면 기기 배율에 따라 반올림이 한쪽으로 쏠려 아이콘이 치우쳐 보임.
 // 안쪽 ring(box-shadow)은 상자 크기에 영향을 주지 않아서 아이콘이 가운데에 그대로 있음
 const CONTROL_CLASS =
-  "size-5 sm:size-4 shrink-0 ring-[1.5px] ring-inset ring-line rounded flex items-center justify-center text-[#8B96C7]";
+  "size-5 sm:size-4 shrink-0 ring-[1.5px] ring-inset ring-line rounded flex items-center justify-center";
 const ICON_CLASS = "block size-2.5 sm:size-2";
 const ICON_PROPS = { strokeWidth: 3, className: ICON_CLASS } as const;
 
@@ -49,16 +49,16 @@ export function WindowFrame({
 }) {
   return (
     <div
-      className={`${className ?? ""} w-full ${SIZE_CLASS[size]} ${maxHeight} relative z-10 rounded-2xl border-2 border-line bg-[#FBFAFF] overflow-hidden shadow-[0_8px_0_rgba(139,150,199,0.15)] flex flex-col grow min-h-0`}
+      className={`${className ?? ""} w-full ${SIZE_CLASS[size]} ${maxHeight} relative z-10 rounded-2xl border-2 border-line bg-window overflow-hidden shadow-window flex flex-col grow min-h-0`}
     >
-      <div className="bg-linear-to-b from-[#D7E4FB] to-[#C3D3F5] border-b-2 border-line px-3.5 py-2.5 flex items-center justify-between">
+      <div className="bg-linear-to-b from-titlebar-from to-titlebar-to border-b-2 border-line px-3.5 py-2.5 flex items-center justify-between">
         <span className="font-jua text-[13px] text-ink">{title}</span>
         <div className="flex items-center gap-1.5">
           {/* 최소화·최대화는 장식. 닫기만 closeHref가 있을 때 동작 */}
-          <span aria-hidden className={`${CONTROL_CLASS} bg-[#EDEBFB]`}>
+          <span aria-hidden className={`${CONTROL_CLASS} bg-control text-control-icon`}>
             <Minus {...ICON_PROPS} />
           </span>
-          <span aria-hidden className={`${CONTROL_CLASS} bg-[#EDEBFB]`}>
+          <span aria-hidden className={`${CONTROL_CLASS} bg-control text-control-icon`}>
             <Square {...ICON_PROPS} className="block size-2 sm:size-1.5" />
           </span>
           {closeHref ? (
@@ -66,7 +66,7 @@ export function WindowFrame({
               href={closeHref}
               aria-label="닫기"
               title="닫기"
-              className={`${CONTROL_CLASS} bg-[#F5C9D9] hover:bg-[#EFA9C2] hover:text-ink-dark`}
+              className={`${CONTROL_CLASS} bg-control-close text-control-close-icon hover:bg-control-close-hover hover:text-ink-dark`}
             >
               <X {...ICON_PROPS} />
             </Link>
@@ -76,12 +76,12 @@ export function WindowFrame({
               onClick={onClose}
               aria-label="닫기"
               title="닫기"
-              className={`${CONTROL_CLASS} bg-[#F5C9D9] hover:bg-[#EFA9C2] hover:text-ink-dark`}
+              className={`${CONTROL_CLASS} bg-control-close text-control-close-icon hover:bg-control-close-hover hover:text-ink-dark`}
             >
               <X {...ICON_PROPS} />
             </button>
           ) : (
-            <span aria-hidden className={`${CONTROL_CLASS} bg-[#F5C9D9]`}>
+            <span aria-hidden className={`${CONTROL_CLASS} bg-control-close text-control-close-icon`}>
               <X {...ICON_PROPS} />
             </span>
           )}

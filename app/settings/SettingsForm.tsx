@@ -51,7 +51,7 @@ export function SettingsForm({ profile }: { profile: UserProfile }) {
                   key={age}
                   onClick={() => setAgeGroup(age)}
                   className={`rounded-full border-2 px-3 py-1.5 text-[12px] font-jua transition-colors ${
-                    ageGroup === age ? 'border-line bg-sky-light text-ink' : 'border-line-soft bg-white text-muted'
+                    ageGroup === age ? 'border-line bg-sky-light text-ink' : 'border-line-soft bg-surface text-muted'
                   }`}
                 >
                   {age}

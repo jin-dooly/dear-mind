@@ -32,7 +32,7 @@ export function FadeScrollArea({ children, className = '' }: { children: ReactNo
       </div>
       <div
         aria-hidden
-        className={`pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-linear-to-b from-transparent to-[#FBFAFF] transition-opacity duration-200 ${
+        className={`pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-linear-to-b from-transparent to-window transition-opacity duration-200 ${
           hasMore ? 'opacity-100' : 'opacity-0'
         }`}
       />

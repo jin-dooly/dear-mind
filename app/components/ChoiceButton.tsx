@@ -19,7 +19,7 @@ export function ChoiceButton({
       type="button"
       onClick={onClick}
       className={`w-full rounded-xl border-2 px-4 py-3 text-left transition-colors ${
-        selected ? `border-line ${selectedClassName}` : 'border-line-soft bg-white'
+        selected ? `border-line ${selectedClassName}` : 'border-line-soft bg-surface'
       }`}
     >
       <span className={`block font-jua text-[14px] ${selected ? 'text-ink-dark' : 'text-ink'}`}>{label}</span>

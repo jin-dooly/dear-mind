@@ -1,6 +1,7 @@
 import { MoonIcon } from "lucide-react";
 import { WindowFrame } from "@/app/components/WindowFrame";
 import { GoogleLoginButton } from "@/app/components/GoogleLoginButton";
+import { ThemeToggle } from "@/app/components/ThemeToggle";
 
 export default async function MainPage({
   searchParams,
@@ -11,6 +12,7 @@ export default async function MainPage({
 
   return (
     <div className="relative p-7 flex flex-col h-dvh items-center justify-center">
+      <ThemeToggle />
       <WindowFrame title="DEAR-MIND.EXE" size="md" maxHeight="max-h-140">
         <div className="relative flex flex-col grow items-center justify-center text-center px-6 py-10">
           <MoonIcon

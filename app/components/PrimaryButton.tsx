@@ -6,7 +6,7 @@ import Link from 'next/link';
  * 크기·모서리는 쓰는 곳에서 정함 (로그인 버튼, 레벨 제안의 작은 버튼 등에서도 사용)
  */
 export const PRIMARY_SURFACE_CLASS =
-  'border-2 border-line bg-primary font-jua text-ink-dark transition-transform active:translate-y-0.5';
+  'border-2 border-line bg-primary font-jua text-on-primary transition-transform active:translate-y-0.5';
 
 const PRIMARY_CLASS = `w-full rounded-xl px-5 py-3.5 text-[15px] text-center ${PRIMARY_SURFACE_CLASS}`;
 
