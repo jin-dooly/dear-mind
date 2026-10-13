@@ -16,7 +16,8 @@ export default async function MainPage({
     <div className={`relative p-7 ${THEME_TOGGLE_SPACE_CLASS} flex flex-col h-dvh items-center justify-center`}>
       <ThemeToggle />
       <WindowFrame title="DEAR-MIND.EXE" size="md">
-        <div className="relative flex flex-col grow items-center justify-center text-center px-6 py-10 overflow-y-auto">
+        {/* 내용이 창보다 길면 justify-center는 위쪽을 스크롤로도 볼 수 없게 잘라 버려서, 넘칠 때는 위부터 보이는 safe center */}
+        <div className="relative flex flex-col grow items-center justify-center-safe text-center px-6 py-10 overflow-y-auto">
           <MoonIcon
             size={56}
             stroke="#9FB4EA"
