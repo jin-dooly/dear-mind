@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import { createClient, createClientWithUser } from "@/app/lib/supabase/server";
 import { analyzeJournal } from "@/app/lib/analysis";
+import { pathAfterLogin } from "@/app/lib/auth";
+import { loginIdToEmail } from "@/app/lib/demoAccount";
 import { refreshTodaysQuestions } from "@/app/lib/dailyQuestions";
 import { toAnalysis, type AnalysisRow } from "@/app/lib/db";
 import type { AIAnalysis, Journal, UserProfile } from "@/app/lib/types";
@@ -106,6 +108,39 @@ export async function analyzeAndSaveJournal(
     .single<AnalysisRow>();
   if (savedError) throw savedError;
   return toAnalysis(saved);
+}
+
+/** 실패해도 아이디는 남겨 둘 수 있게 함께 돌려줌 (폼 액션이 끝나면 입력칸이 초기화됨) */
+export type PasswordLoginState = { id: string; error: string | null };
+
+/**
+ * 아이디·비밀번호 로그인 (체험 계정용, 회원가입은 없음).
+ * 틀린 비밀번호는 예상 가능한 에러라 반환값으로 알리고, 성공하면 바로 이동
+ */
+export async function signInWithPassword(
+  _prevState: PasswordLoginState,
+  formData: FormData,
+): Promise<PasswordLoginState> {
+  const id = String(formData.get("id") ?? "").trim();
+  const password = String(formData.get("password") ?? "");
+  if (!id || !password) return { id, error: "아이디와 비밀번호를 입력해 주세요" };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: loginIdToEmail(id),
+    password,
+  });
+  if (error) {
+    return {
+      id,
+      error:
+        error.code === "invalid_credentials"
+          ? "아이디나 비밀번호가 맞지 않아요"
+          : "로그인하지 못했어요. 잠시 후 다시 시도해 주세요",
+    };
+  }
+
+  redirect(await pathAfterLogin(supabase, data.user.id));
 }
 
 export async function signOut() {
