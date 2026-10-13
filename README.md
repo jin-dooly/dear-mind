@@ -115,6 +115,16 @@ AI는 진단, 치료, 상담을 하지 않습니다. 감정을 점수로 매기�
 | **기록 보기 (목록)**                       | **기록 보기 (캘린더)**                                      | **다크 모드**                            |
 | ![기록 목록](docs/screenshots/records.jpg) | ![기록 캘린더](docs/screenshots/records-calendar.jpg)       | ![다크 모드](docs/screenshots/dark.jpg)  |
 
+### 예외 상황
+
+| 위기 표현 감지                                            | 다른 질문 받기 한도                                                  | 기록이 없을 때                                                 |
+| --------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------- |
+| ![위기 표현 감지](docs/screenshots/error-safety.jpg)      | ![다른 질문 받기 한도](docs/screenshots/error-refresh-limit.jpg)     | ![기록이 없을 때](docs/screenshots/error-empty-records.jpg)    |
+| AI 분석 대신 전문기관 연락처가 담긴 고정 안내 문구        | 하루 2회를 다 쓰면 버튼이 안내 문구로 바뀌고, 받은 세트는 넘겨 보기  | 빈 화면 대신 첫 기록을 쓰러 가는 버튼                          |
+| **로그인 실패**                                           | **없는 페이지**                                                      | **오류 화면**                                                  |
+| ![로그인 실패](docs/screenshots/error-login.jpg)          | ![없는 페이지](docs/screenshots/error-not-found.jpg)                 | ![오류 화면](docs/screenshots/error-page.jpg)                  |
+| 틀린 비밀번호는 안내 문구를 띄우고 아이디는 남겨 둠       | 없는 주소나 다른 사람의 기록은 `NOT-FOUND.EXE` 창으로                | 예상하지 못한 오류는 `ERROR.EXE` 창에서 다시 시도하거나 홈으로 |
+
 <br />
 
 ## 서비스 흐름
