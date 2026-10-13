@@ -36,6 +36,9 @@ async function getTodaysSets(
     .not("position", "is", null)
     .order("batch", { ascending: true })
     .order("position", { ascending: true })
+    // Next는 한 렌더 안의 같은 GET fetch를 메모이즈함. 저장 직후 다시 읽을 때
+    // 저장 전의 빈 결과가 재사용되지 않도록 매번 새 signal을 넘겨 메모이즈를 끔
+    .abortSignal(new AbortController().signal)
     .overrideTypes<QuestionRow[]>();
   if (error) throw error;
 
