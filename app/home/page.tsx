@@ -2,6 +2,7 @@ import { Pencil, BookOpen, Settings } from "lucide-react";
 import { WindowFrame } from "@/app/components/WindowFrame";
 import { FolderMenuItem } from "@/app/components/FolderMenuItem";
 import { ThemeToggle } from "@/app/components/ThemeToggle";
+import { THEME_TOGGLE_SPACE_CLASS } from "@/app/lib/theme";
 import { DEFAULT_PROFILE, getProfile } from "@/app/lib/db";
 import { HomeCat } from "./HomeCat";
 
@@ -12,7 +13,7 @@ export default async function HomePage() {
     nickname === DEFAULT_PROFILE.nickname ? "안녕하세요" : `${nickname}님, 안녕하세요`;
 
   return (
-    <div className="relative p-7 flex flex-col h-dvh items-center justify-center">
+    <div className={`relative p-7 ${THEME_TOGGLE_SPACE_CLASS} flex flex-col h-dvh items-center justify-center`}>
       <ThemeToggle />
       <WindowFrame title="HOME.EXE" size="sm" className="h-fit grow-0">
         <div className="p-2 pb-4">

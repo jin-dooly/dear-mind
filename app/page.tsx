@@ -3,6 +3,7 @@ import { WindowFrame } from "@/app/components/WindowFrame";
 import { GoogleLoginButton } from "@/app/components/GoogleLoginButton";
 import { PasswordLoginForm } from "@/app/components/PasswordLoginForm";
 import { ThemeToggle } from "@/app/components/ThemeToggle";
+import { THEME_TOGGLE_SPACE_CLASS } from "@/app/lib/theme";
 
 export default async function MainPage({
   searchParams,
@@ -12,7 +13,7 @@ export default async function MainPage({
   const { error } = await searchParams;
 
   return (
-    <div className="relative p-7 flex flex-col h-dvh items-center justify-center">
+    <div className={`relative p-7 ${THEME_TOGGLE_SPACE_CLASS} flex flex-col h-dvh items-center justify-center`}>
       <ThemeToggle />
       <WindowFrame title="DEAR-MIND.EXE" size="md">
         <div className="relative flex flex-col grow items-center justify-center text-center px-6 py-10 overflow-y-auto">
